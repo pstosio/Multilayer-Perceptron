@@ -23,9 +23,10 @@ namespace IAD_2
         private double[] weights;
 
         /// <summary>
-        /// Wektor waaartości podany na wejście neuronu
+        /// Numer neuronu w warstwie - zmienna pomocnicza.
+        /// Neuron powielający po otrzymaniu wektora wejściowego zwróci element z indeksem id.
         /// </summary>
-        private double[] input;      
+        private int id;
         #endregion
 
         /// <summary>
@@ -33,29 +34,11 @@ namespace IAD_2
         /// </summary>
         /// <param name="_activateFunction"> Funkcja aktywacji </param>
         /// <param name="_inputAmount"> Ilość wejść </param>
-        public Neuron(IActivateFunction _activateFunction, int _inputAmount)
+        public Neuron(IActivateFunction _activateFunction, int _inputAmount, int _id)
         {
             activateFunction = _activateFunction;
             weights = new double[_inputAmount];
-        }
-
-        /// <summary>
-        /// Konstruktor przyjmujący funkcję aktywacji i wektor wejściowy
-        /// </summary>
-        /// <param name="_activateFunction"> Dependency Injection </param>
-        /// <param name="_inputWeights"></param>
-        public Neuron(IActivateFunction _activateFunction, double[] _input)
-        {
-            if (_input.Length == 0)
-                throw new Exception("Liczba wejść neronu nie może być zerowa.");
-
-            weights = new double[_input.Length];
-
-            activateFunction = _activateFunction;
-            input = _input;
-
-            // Losowe wagi neuronu
-            this.generateRandomWeights();
+            id = _id;
         }
 
         /// <summary>
@@ -73,12 +56,13 @@ namespace IAD_2
         }
 
         /// <summary>
-        /// Funkcja zwrcaca wyjście neuronu
+        /// Funkcja zwraca wyjście neuronu.
         /// </summary>
+        /// <param name="_input"> Wektor wejściowy </param>
         /// <returns></returns>
-        public double neuronOutput()
+        public int neuronOutput(int[] _input)
         {
-            return activateFunction.getNeuronOutput(input, weights);
+            return activateFunction.getNeuronOutput(_input, weights, id);
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace IAD_2
 {
     /// <summary>
-    /// Pojedyńcza warstwa sieci neuronowej
+    /// Pojedyncza warstwa sieci neuronowej
     /// </summary>
     public class Layer
     {
@@ -28,8 +28,25 @@ namespace IAD_2
 
             for(int i=0; i < _neuronAmount; i++)
             {
-                neurons.Add(new Neuron(_activateFunction, _inputAmount));
+                neurons.Add(new Neuron(_activateFunction, _inputAmount, i));
             }
+        }
+
+        /// <summary>
+        /// Metoda procesuje warstwę. Przekazywany jest wektor wejściowy, a zwaracany jest wektor wyjściowy warstwy.
+        /// </summary>
+        /// <param name="_inputValues"> Wektor wejściowy warstwy. </param>
+        /// <returns></returns>
+        public int[] process(int[] _inputValues)
+        {
+            int[] output = new int[neurons.Count]; // Wektor wyjściowy o wielkości neuronów w warstwie
+
+            for(int i=0; i<neurons.Count; i++)
+            {
+                output[i] = neurons[i].neuronOutput(_inputValues);
+            }
+
+            return output;
         }
     }
 }

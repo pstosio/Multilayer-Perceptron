@@ -11,16 +11,26 @@ namespace IAD_2
     /// </summary>
     public class SigmoidalFunction : IActivateFunction
     {
-        public double getNeuronOutput(double[] _input, double[] _weights)
+        /// <summary>
+        /// Funkcja sigmoidalna unipolarna
+        /// </summary>
+        /// <param name="_input"></param>
+        /// <param name="_weights"></param>
+        /// <param name="_id"></param>
+        /// <returns></returns>
+        public int getNeuronOutput(int[] _input, double[] _weights, int _id)
         {
-            return (double)(1.0d / 1.0d + Math.Exp(-1 * this.output(_input, _weights)));
+            double ret = (double)(1.0d / (1.0d + Math.Exp(-1.0d * this.outputSum(_input, _weights))));
+
+            // Próg aktywacji ustawiony na wartoś 0.5
+            return ret >= 0.5 ? 1 : 0;
         }
 
         /// <summary>
         /// Funkcja zwraca sumę iloczynu wektora wejściowego z wagami neuronu
         /// </summary>
         /// <returns></returns>
-        private double output(double[] _input, double[] _weights)
+        private double outputSum(int[] _input, double[] _weights)
         {
             double sum = 0d;
 

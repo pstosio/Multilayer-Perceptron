@@ -8,6 +8,6 @@ namespace IAD_2
 {
     public interface IActivateFunction
     {
-        double getNeuronOutput(double[] _input, double[] _weights);
+        int getNeuronOutput(int[] _input, double[] _weights, int id);
     }
 }

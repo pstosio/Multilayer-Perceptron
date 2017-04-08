@@ -11,9 +11,9 @@ namespace IAD_2
     /// </summary>
     public class DuplicateFunction : IActivateFunction
     {
-        public double getNeuronOutput(double[] _input, double[] _weights)
+        public int getNeuronOutput(int[] _input, double[] _weights, int _id)
         {
-            return _input[0];
+            return _input[_id];
         }
     }
 }

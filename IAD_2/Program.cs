@@ -17,6 +17,8 @@ namespace IAD_2
             perceptron.initLayer(4, 2,  new SigmoidalFunction());
 
             perceptron.randomWeights();
+            perceptron.process();
+
 
             Console.ReadLine();
         }
