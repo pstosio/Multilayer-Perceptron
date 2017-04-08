@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace IAD_2
 {
@@ -46,11 +47,11 @@ namespace IAD_2
         /// </summary>
         public void generateRandomWeights()
         {
-            int seed = System.DateTime.Now.Millisecond;
-            Random rand = new Random(seed);
+            Random rand;
 
             for(int i=0; i<weights.Length; i++)
             {
+                rand = new Random(Guid.NewGuid().GetHashCode());
                 weights[i] = rand.NextDouble() * 2 - 1;
             }
         }
@@ -63,6 +64,20 @@ namespace IAD_2
         public int neuronOutput(int[] _input)
         {
             return activateFunction.getNeuronOutput(_input, weights, id);
+        }
+
+        public override string ToString()
+        {
+            string ret;
+
+            ret = String.Format("   Neuron {0} posiada następujące wagi: \n", id);
+
+            for(int i=0; i<weights.Length; i++)
+            {
+                ret += String.Format("      - waga {0} : {1} \n", i, weights[i]);
+            }
+
+            return ret;
         }
     }
 }

@@ -15,14 +15,20 @@ namespace IAD_2
         /// Warstwy sieci neuronowej
         /// </summary>
         private List<Layer> layers;
-       
+
         /// <summary>
-        /// 
+        /// Wektory wyjściowe poszczególnych warstw
+        /// </summary>
+        public List<int[]> vectors;
+
+        /// <summary>
+        /// Konstruktor przyjmujcy ilość warstw sieci perceptronu
         /// </summary>
         /// <param name="_layerAmount"> Ilość warstw sieci </param>
         public Perceptron(int _layerAmount)
         {
             layers = new List<Layer>(_layerAmount);
+            vectors = new List<int[]>(_layerAmount);
         }
 
         /// <summary>
@@ -31,9 +37,9 @@ namespace IAD_2
         /// <param name="_neuronAmount"> Ilość neuronów w warstwie </param>
         /// <param name="_inputAmount"> Ilość wejść - długośc wektora wejściowego </param>
         /// <param name="_activateFunction"> Funkcja aktywacji - Inversion of Control </param>
-        public void initLayer(int _neuronAmount, int _inputAmount, IActivateFunction _activateFunction)
+        public void initLayer(int _id, int _neuronAmount, int _inputAmount, IActivateFunction _activateFunction)
         {
-            layers.Add(new Layer(_neuronAmount, _inputAmount, _activateFunction ));
+            layers.Add(new Layer(_id, _neuronAmount, _inputAmount, _activateFunction ));
         }
 
         /// <summary>
@@ -51,22 +57,46 @@ namespace IAD_2
         }
 
         /// <summary>
-        /// 
+        /// Metoda implementująca działanie perceptronu - 1 epoka
         /// </summary>
         public void process()
         {
-            int[] input = new int[4]; // Wektor wejściowy warstwy przetwarzającej
+            // 1. Podajemy na wejście sygnał wejściowy - wektor wejściowy
+            int[] input = TeachingPatterns.input; 
 
-            input[0] = 1;
-            input[1] = 0;
-            input[2] = 0;
-            input[3] = 0;
+            // 2. Obliczamy wartości wyjściowe warstw 
+            for(int i=0; i<layers.Count; i++) // Pętla po warstwach sieci
+            {
+                if(i==0) // Dla pierwszej warstwy podajemy stały wzorzec
+                {
+                    vectors.Add(layers[0].process(input));
+                }
+                else // Kolejne warstwy przyjmują wektor wejściowy obliczony przez warstwę poprzedającą
+                {
+                    vectors.Add(layers[i].process(vectors[i - 1]));
+                }
+            }
 
-            List<int[]> output = new List<int[]>();
+            // 3. Wartości wyznaczone w ostatniej warstwie stanowią odpowiedź sieci na podany sygnał wejściowy.
 
-            output.Add(layers[0].process(input));
-            output.Add(layers[1].process(output[0]));
-            output.Add(layers[2].process(output[1]));
+            // 4. Sygnał porównujemy z wzorcowym i wyznaczamy błąd
+
+            // 5. Ppropagujemy błąd wstecz sieci i dokonujemy korekty wartości wag połączeń synaptycznych
+        }
+
+        public override string ToString()
+        {
+            string ret;
+
+            ret = "Zainicjowano następujący perceptron: \n";
+
+            foreach(Layer layer in layers)
+            {
+                ret += layer.ToString();
+            }
+
+            return ret;
+
         }
     }
 }
