@@ -11,6 +11,8 @@ namespace IAD_2
     /// </summary>
     public class SigmoidalFunction : IActivateFunction
     {
+        double sigmoidalValue;
+
         /// <summary>
         /// Funkcja sigmoidalna unipolarna
         /// </summary>
@@ -20,10 +22,19 @@ namespace IAD_2
         /// <returns></returns>
         public int getNeuronOutput(int[] _input, double[] _weights, int _id)
         {
-            double ret = (double)(1.0d / (1.0d + Math.Exp(-1.0d * this.outputSum(_input, _weights))));
+            sigmoidalValue = (double)(1.0d / (1.0d + Math.Exp(-1.0d * this.outputSum(_input, _weights))));
 
-            // Próg aktywacji ustawiony na wartoś 0.5
-            return ret >= 0.5 ? 1 : 0;
+            // Próg aktywacji ustawiony na wartość 0.5
+            return sigmoidalValue >= 0.5 ? 1 : 0;
+        }
+
+        /// <summary>
+        /// Pochodna
+        /// </summary>
+        /// <returns></returns>
+        public double getNeuronDeriativeOutput()
+        {
+            return 1.0d * sigmoidalValue * (1.0d * sigmoidalValue);
         }
 
         /// <summary>
@@ -41,6 +52,11 @@ namespace IAD_2
                 sum += _input[i] * _weights[i];
 
             return sum;
+        }
+
+        public double computeError(int _input, int _target)
+        {
+            return (_target - _input) * this.getNeuronDeriativeOutput();
         }
     }
 }

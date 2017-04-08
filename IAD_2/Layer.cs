@@ -36,6 +36,7 @@ namespace IAD_2
         /// <summary>
         /// Konstruktor warstwy sieci neuronowe.
         /// </summary>
+        /// <param name="_id"> Id warstwy </param>
         /// <param name="_neuronAmount"> Ilośc neuronów w warstwie. </param>
         /// <param name="_inputAmount"> Ilość wejść - długość wektora wejściowego.</param>
         /// <param name="_activateFunction"> Funkcja aktywacji neuronów w warstwie. </param>
@@ -68,6 +69,18 @@ namespace IAD_2
             }
 
             return output;
+        }
+
+        /// <summary>
+        /// Dla każdego neuronu warstwy ustawiamy wartość błędu
+        /// Funkcja jedynie dla ostatniej warstwy - podajemy wartości oczekiwane
+        /// </summary>
+        public void countErrorLastLayer(int[] _expectedOutput)
+        {
+            for(int i=0; i<neurons.Count; i++)
+            {
+                neurons[i].neuronError(output[i], _expectedOutput[i]);
+            }
         }
 
         public override string ToString()

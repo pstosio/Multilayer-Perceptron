@@ -15,5 +15,15 @@ namespace IAD_2
         {
             return _input[_id];
         }
+
+        public double computeError(int _input, int target)
+        {
+            throw new NotImplementedException();
+        }
+
+        public double getNeuronDeriativeOutput()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

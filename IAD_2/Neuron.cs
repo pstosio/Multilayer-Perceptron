@@ -14,6 +14,12 @@ namespace IAD_2
     {
         #region Const
         /// <summary>
+        /// Numer neuronu w warstwie - zmienna pomocnicza.
+        /// Neuron powielający po otrzymaniu wektora wejściowego zwróci element z indeksem id.
+        /// </summary>
+        private int id;
+
+        /// <summary>
         /// Funkcja aktywacji - dependency injection
         /// </summary>
         private IActivateFunction activateFunction; 
@@ -24,10 +30,19 @@ namespace IAD_2
         private double[] weights;
 
         /// <summary>
-        /// Numer neuronu w warstwie - zmienna pomocnicza.
-        /// Neuron powielający po otrzymaniu wektora wejściowego zwróci element z indeksem id.
+        /// Waga biasu
         /// </summary>
-        private int id;
+        private double biasWeights;
+
+        /// <summary>
+        /// Różnice między błędem a wartością wyjściową
+        /// </summary>
+        private double delta;
+
+        /// <summary>
+        /// Wartość błędu
+        /// </summary>
+        private double error { get; set; }
         #endregion
 
         /// <summary>
@@ -66,11 +81,38 @@ namespace IAD_2
             return activateFunction.getNeuronOutput(_input, weights, id);
         }
 
+        public void neuronError(int _neuronOutput, int _targetValue)
+        {
+            this.setError(activateFunction.computeError(_neuronOutput, _targetValue));
+        }
+
+        #region Get/Set error
+        public void setError(double _err)
+        {
+            error = _err;
+        }
+
+        public double getError()
+        {
+            return error;
+        }
+        #endregion
+
+        public double getWeight(int _idx)
+        {
+            return weights[_idx];
+        }
+
+        public double getNeuronDeriative()
+        {
+            return activateFunction.getNeuronDeriativeOutput();
+        }
+
         public override string ToString()
         {
             string ret;
-
-            ret = String.Format("   Neuron {0} posiada następujące wagi: \n", id);
+            
+            ret = String.Format("   Neuron {0}, wagi: \n", id);
 
             for(int i=0; i<weights.Length; i++)
             {

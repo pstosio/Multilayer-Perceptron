@@ -11,15 +11,12 @@ namespace IAD_2
     /// </summary>
     public class Perceptron
     {
+        #region Const
         /// <summary>
         /// Warstwy sieci neuronowej
         /// </summary>
         private List<Layer> layers;
-
-        /// <summary>
-        /// Wektory wyjściowe poszczególnych warstw
-        /// </summary>
-        public List<int[]> vectors;
+        #endregion
 
         /// <summary>
         /// Konstruktor przyjmujcy ilość warstw sieci perceptronu
@@ -28,7 +25,6 @@ namespace IAD_2
         public Perceptron(int _layerAmount)
         {
             layers = new List<Layer>(_layerAmount);
-            vectors = new List<int[]>(_layerAmount);
         }
 
         /// <summary>
@@ -62,27 +58,50 @@ namespace IAD_2
         public void process()
         {
             // 1. Podajemy na wejście sygnał wejściowy - wektor wejściowy
-            int[] input = TeachingPatterns.input; 
+            int[] input = TeachingPatterns.input;
+            int[] expectedOutput = TeachingPatterns.output;
 
             // 2. Obliczamy wartości wyjściowe warstw 
             for(int i=0; i<layers.Count; i++) // Pętla po warstwach sieci
             {
                 if(i==0) // Dla pierwszej warstwy podajemy stały wzorzec
                 {
-                    vectors.Add(layers[0].process(input));
+                    layers[0].process(input);
                 }
                 else // Kolejne warstwy przyjmują wektor wejściowy obliczony przez warstwę poprzedającą
                 {
-                    vectors.Add(layers[i].process(vectors[i - 1]));
+                    layers[i].process(layers[i - 1].output);
                 }
             }
 
-            // 3. Wartości wyznaczone w ostatniej warstwie stanowią odpowiedź sieci na podany sygnał wejściowy.
+            // 3. Sygnał porównujemy z wzorcowym i wyznaczamy błąd
+            //  - Wartości wyznaczone w ostatniej warstwie stanowią odpowiedź sieci na podany sygnał wejściowy.
+            //  - liczymy błąd dla każdego nauronu rozpoczynając od warstwy ostatniej
+            layers[layers.Count - 1].countErrorLastLayer(expectedOutput);
 
-            // 4. Sygnał porównujemy z wzorcowym i wyznaczamy błąd
+            // Pętla od przedostatniej warstwy do pierwszej
+            for (int i = layers.Count - 2; i > 0; i--)
+            {
+                Layer następna = layers[i + 1];
+                Layer aktualna = layers[i];
 
-            // 5. Ppropagujemy błąd wstecz sieci i dokonujemy korekty wartości wag połączeń synaptycznych
+                // Pętla po neuronach warstwy aktualnej
+                for(int j=0; j < aktualna.neurons.Count; j++)
+                {
+                    double err = 0.0d;
+
+                    foreach(Neuron neuronFromNext in następna.neurons)
+                    {
+                        err += neuronFromNext.getError() * neuronFromNext.getWeight(j);
+                    }
+
+                    aktualna.neurons[j].setError(err * aktualna.neurons[j].getNeuronDeriative()); 
+                }
+            }
+
+            // 4. Ppropagujemy błąd wstecz sieci i dokonujemy korekty wartości wag połączeń synaptycznych
         }
+
 
         public override string ToString()
         {

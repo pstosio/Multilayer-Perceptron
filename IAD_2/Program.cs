@@ -18,6 +18,7 @@ namespace IAD_2
 
             perceptron.randomWeights();
             perceptron.process();
+
             Console.WriteLine(perceptron.ToString());
 
             Console.ReadLine();

@@ -9,5 +9,9 @@ namespace IAD_2
     public interface IActivateFunction
     {
         int getNeuronOutput(int[] _input, double[] _weights, int id);
+
+        double getNeuronDeriativeOutput();
+
+        double computeError(int _neuronOutput, int target);
     }
 }
