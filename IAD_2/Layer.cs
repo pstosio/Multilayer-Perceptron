@@ -17,14 +17,18 @@ namespace IAD_2
         public List<Neuron> neurons;
 
         /// <summary>
-        /// Konstruktor parametrowy
+        /// Konstruktor warstwy sieci neuronowe.
         /// </summary>
-        /// <param name="_neuronAmount">Ilość neuronów warstwy</param>
-        public Layer(int _neuronAmount)
+        /// <param name="_neuronAmount"> Ilośc neuronów w warstwie. </param>
+        /// <param name="_inputAmount"> Ilość wejść - długość wektora wejściowego.</param>
+        /// <param name="_activateFunction"> Funkcja aktywacji neuronów w warstwie. </param>
+        public Layer(int _neuronAmount, int _inputAmount, IActivateFunction _activateFunction)
         {
-            for(int i=0; i<_neuronAmount; i++)
+            neurons = new List<Neuron>(_neuronAmount);
+
+            for(int i=0; i < _neuronAmount; i++)
             {
-                neurons.Add(new Neuron(NetworkProperty.));
+                neurons.Add(new Neuron(_activateFunction, _inputAmount));
             }
         }
     }

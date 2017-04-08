@@ -15,10 +15,5 @@ namespace IAD_2
         /// Czy uwzględniać wagę biasu 
         /// </summary>
         public static bool isBias;
-
-        /// <summary>
-        /// Ilość wejść 
-        /// </summary>
-        public static int neuronInputAmount;
     }
 }

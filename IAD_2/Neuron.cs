@@ -29,6 +29,17 @@ namespace IAD_2
         #endregion
 
         /// <summary>
+        /// Konstruktor przyjmujący funkcję aktywacji oraz ilość wejśc sieci.
+        /// </summary>
+        /// <param name="_activateFunction"> Funkcja aktywacji </param>
+        /// <param name="_inputAmount"> Ilość wejść </param>
+        public Neuron(IActivateFunction _activateFunction, int _inputAmount)
+        {
+            activateFunction = _activateFunction;
+            weights = new double[_inputAmount];
+        }
+
+        /// <summary>
         /// Konstruktor przyjmujący funkcję aktywacji i wektor wejściowy
         /// </summary>
         /// <param name="_activateFunction"> Dependency Injection </param>
@@ -50,14 +61,14 @@ namespace IAD_2
         /// <summary>
         /// Funkcja losuje wagi neuronu z przedziału -1,1
         /// </summary>
-        private void generateRandomWeights()
+        public void generateRandomWeights()
         {
             int seed = System.DateTime.Now.Millisecond;
             Random rand = new Random(seed);
 
             for(int i=0; i<weights.Length; i++)
             {
-                weights[i] = rand.Next(-1, 1);
+                weights[i] = rand.NextDouble() * 2 - 1;
             }
         }
 

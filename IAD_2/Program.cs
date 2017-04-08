@@ -10,6 +10,15 @@ namespace IAD_2
     {
         static void Main(string[] args)
         {
+            Perceptron perceptron = new Perceptron(3);
+
+            perceptron.initLayer(4, 1, new DuplicateFunction());
+            perceptron.initLayer(2, 4, new SigmoidalFunction());
+            perceptron.initLayer(4, 2,  new SigmoidalFunction());
+
+            perceptron.randomWeights();
+
+            Console.ReadLine();
         }
     }
 }
