@@ -39,9 +39,15 @@ namespace IAD_2
             return 1.0d * outputValue * (1.0d * outputValue);
         }
 
-        public override double computeError(double _input, int _target)
+        public override double computeError(double _neuronOutput, int _target)
         {
-            return (_target - _input) * this.getNeuronDeriativeOutput();
+            double tmpsum = 0.0d;
+            for(int i =0; i<weights.Length; i++)
+            {
+                tmpsum += weights[i] * inputValues[i];
+            }
+
+            return (_neuronOutput - _target) * this.getNeuronDeriativeOutput();
         }
 
     }

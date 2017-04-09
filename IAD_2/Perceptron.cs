@@ -89,6 +89,8 @@ namespace IAD_2
                     layers[i].process(layers[i - 1].output);
                 }
             }
+
+            this.countErrors();
         }
 
         public void countErrors()
@@ -153,6 +155,35 @@ namespace IAD_2
                     }
                 }
             }
+        }
+
+
+        /// <summary>
+        /// Funkcja liczy błąd całkowity perceptronu - średnia ze wszystkich neuronów
+        /// </summary>
+        public double overallError()
+        {
+            List<double> overallError = new List<double>();
+
+            foreach(Layer layer in layers)
+            {
+                foreach(Neuron neuron in layer.neurons)
+                {
+                    overallError.Add(neuron.error);
+                }
+            }
+
+            return overallError.Average();
+        }
+
+        public void saveWeights()
+        {
+            FileService fs = new FileService();
+        }
+
+        public void uploadWeights()
+        {
+
         }
 
         public override string ToString()

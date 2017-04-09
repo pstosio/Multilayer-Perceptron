@@ -14,9 +14,9 @@ namespace IAD_2
         public double[] inputValues;
 
         /// <summary>
-        /// Wagi wejściowe
+        /// Wagi
         /// </summary>
-        public double[] inputWeights;
+        public double[] weights;
 
         /// <summary>
         /// Wartośc sumatora
@@ -43,11 +43,11 @@ namespace IAD_2
         {
             double sum = 0d;
 
-            if (inputWeights.Length != inputValues.Length)
+            if (weights.Length != inputValues.Length)
                 throw new Exception("Niepoprawne wektory wag..");
 
             for (int i = 0; i < inputValues.Length; i++)
-                sum += inputValues[i] * inputWeights[i];
+                sum += inputValues[i] * weights[i];
 
             return sum;
         }

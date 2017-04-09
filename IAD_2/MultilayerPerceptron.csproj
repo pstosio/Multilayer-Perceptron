@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Activate Functions\DuplicateFunction.cs" />
     <Compile Include="Activate Functions\ActivateFunction.cs" />
+    <Compile Include="FileService.cs" />
     <Compile Include="Layer.cs" />
     <Compile Include="Neuron.cs" />
     <Compile Include="Perceptron.cs" />
