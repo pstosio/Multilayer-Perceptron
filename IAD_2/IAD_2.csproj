@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activate Functions\DuplicateFunction.cs" />
-    <Compile Include="Activate Functions\IActivateFunction.cs" />
+    <Compile Include="Activate Functions\ActivateFunction.cs" />
     <Compile Include="Layer.cs" />
     <Compile Include="Neuron.cs" />
     <Compile Include="Perceptron.cs" />
@@ -52,6 +52,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Activate Functions\SigmoidalFunction.cs" />
     <Compile Include="TeachingPatterns.cs" />
+    <Compile Include="TestingMode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

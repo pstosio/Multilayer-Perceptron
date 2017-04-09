@@ -30,10 +30,11 @@ namespace IAD_2
         /// <summary>
         /// Inicjalizacja pojedynczej warstwy sieci
         /// </summary>
+        /// <param name="_id">Identyfikator sieci </param>
         /// <param name="_neuronAmount"> Ilość neuronów w warstwie </param>
         /// <param name="_inputAmount"> Ilość wejść - długośc wektora wejściowego </param>
         /// <param name="_activateFunction"> Funkcja aktywacji - Inversion of Control </param>
-        public void initLayer(int _id, int _neuronAmount, int _inputAmount, IActivateFunction _activateFunction)
+        public void initLayer(int _id, int _neuronAmount, int _inputAmount, ActivateFunction _activateFunction)
         {
             layers.Add(new Layer(_id, _neuronAmount, _inputAmount, _activateFunction ));
         }
@@ -55,27 +56,33 @@ namespace IAD_2
         /// <summary>
         /// Algorytm wstecznej propagacji błędów do wywoływania w pętli
         /// </summary>
-        public void backPropagation()
+        public void backPropagation(double _wspolczynnikNauki, double _wspolczynnikMomentum)
         {
             this.process();
             this.countErrors();
-            this.aktualizujWagi(0.9, 0.0);
+            this.aktualizujWagi(_wspolczynnikMomentum, _wspolczynnikMomentum);
         }
 
         /// <summary>
-        /// Metoda implementująca działanie perceptronu - zerowa epoka
+        /// Epoka sieci
         /// </summary>
         public void process()
         {
-            // 1. Podajemy na wejście sygnał wejściowy - wektor wejściowy
-            int[] input = TeachingPatterns.input;
+            /*** 1. Podajemy na wejście sygnał wejściowy - wektor wejściowy ***/
+            int[] input = TeachingPattern_1.input;
 
-            // 2. Obliczamy wartości wyjściowe warstw 
+            double[] inputDouble = new double[input.Length];
+            for(int i=0; i<input.Length; i++)
+            {
+                inputDouble[i] = Convert.ToDouble(input[i]);
+            }
+
+            /*** 2. Obliczamy wartości wyjściowe warstw ***/
             for(int i=0; i<layers.Count; i++) // Pętla po warstwach sieci
             {
-                if(i==0) // Dla pierwszej warstwy podajemy stały wzorzec
+                if(i==0) // Dla pierwszej warstwy podajemy stały wzorzec , int na double
                 {
-                    layers[0].process(input);
+                    layers[0].process( inputDouble );
                 }
                 else // Kolejne warstwy przyjmują wektor wejściowy obliczony przez warstwę poprzedającą
                 {
@@ -86,7 +93,7 @@ namespace IAD_2
 
         public void countErrors()
         {
-            int[] expectedOutput = TeachingPatterns.output;
+            int[] expectedOutput = TeachingPattern_1.output;
 
             // Sygnał porównujemy z wzorcowym i wyznaczamy błąd
             //  - Wartości wyznaczone w ostatniej warstwie stanowią odpowiedź sieci na podany sygnał wejściowy.
@@ -106,10 +113,10 @@ namespace IAD_2
 
                     foreach (Neuron neuronFromNext in następna.neurons)
                     {
-                        err += neuronFromNext.getError() * neuronFromNext.getWeight(j);
+                        err += neuronFromNext.error * neuronFromNext.getWeight(j);
                     }
 
-                    aktualna.neurons[j].setError(err * aktualna.neurons[j].getNeuronDeriative());
+                    aktualna.neurons[j].error = (err * aktualna.neurons[j].getNeuronDeriative());
                 }
             }
         }
@@ -130,7 +137,7 @@ namespace IAD_2
                 {
                     Neuron neuron = aktualna.neurons[j];
 
-                    for (int k = 0; k < neuron.getWeights().Length; k++)
+                    for (int k = 0; k < neuron.weights.Length; k++)
                     {
                         double otrzymanaWartosc = 0.0d;
                         if (k >= poprzednia.neurons.Count)
@@ -139,10 +146,10 @@ namespace IAD_2
                             otrzymanaWartosc = poprzednia.neurons[k].output;
 
                         double pochodna = neuron.getNeuronDeriative();
-                        double delta = otrzymanaWartosc * _wspolczynnikNauki * neuron.getError();
+                        double delta = otrzymanaWartosc * _wspolczynnikNauki * neuron.error;
                         double nowaWaga = neuron.getWeight(k) + delta + _wspolczynnikMomentum * neuron.prevDelta[k];
-                        neuron.setPrevDelta(k, delta);
-                        neuron.setWeight(k, nowaWaga); 
+                        neuron.prevDelta[k] = delta;
+                        neuron.weights[k] = nowaWaga; 
                     }
                 }
             }

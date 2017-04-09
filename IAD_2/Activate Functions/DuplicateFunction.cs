@@ -9,19 +9,28 @@ namespace IAD_2
     /// <summary>
     /// Powielająca funkcja aktywacji
     /// </summary>
-    public class DuplicateFunction : IActivateFunction
+    public sealed class DuplicateFunction : ActivateFunction
     {
-        public int getNeuronOutput(int[] _input, double[] _weights, int _id)
+        public override void initFunction(double[] _inputValues, double[] _inputWeights)
         {
-            return _input[_id];
+            inputValues = _inputValues;
+            inputWeights = _inputWeights;
+
+            adderValue = this.getNeuronOutputAdder();
+            outputValue = this.getNeuronOutputValue();
         }
 
-        public double computeError(int _input, int target)
+        public override double getNeuronOutputValue()
+        {
+            return adderValue;
+        }
+
+        public override double computeError(double _input, int target)
         {
             throw new NotImplementedException();
         }
 
-        public double getNeuronDeriativeOutput()
+        public override double getNeuronDeriativeOutput()
         {
             throw new NotImplementedException();
         }

@@ -22,14 +22,27 @@ namespace IAD_2
         /// <summary>
         /// Funkcja aktywacji - dependency injection
         /// </summary>
-        private IActivateFunction activateFunction; 
+        private ActivateFunction activateFunction; 
 
         /// <summary>
         /// Wektor wag neuronu
         /// </summary>
-        private double[] weights;
+        public double[] weights;
 
-        public int output { get; private set; }
+        /// <summary>
+        /// Wartość sumatora neuronu
+        /// </summary>
+        public double outputAdder;
+
+        /// <summary>
+        /// Wartość wyjściowa neuronu
+        /// </summary>
+        public double output;
+
+        /// <summary>
+        /// Wartość błędu
+        /// </summary>
+        public double error;
 
         /// <summary>
         /// Czy jest waga biasu
@@ -42,11 +55,6 @@ namespace IAD_2
         public double delta { get; set; }
 
         public double[] prevDelta { get; set; }
-
-        /// <summary>
-        /// Wartość błędu
-        /// </summary>
-        private double error { get; set; }
         #endregion
 
         /// <summary>
@@ -54,13 +62,21 @@ namespace IAD_2
         /// </summary>
         /// <param name="_activateFunction"> Funkcja aktywacji </param>
         /// <param name="_inputAmount"> Ilość wejść </param>
-        public Neuron(IActivateFunction _activateFunction, int _inputAmount, int _id, bool _isBias = false)
+        public Neuron(ActivateFunction _activateFunction, int _inputAmount, int _id, bool _isBias = false)
         {
             activateFunction = _activateFunction;
             weights = new double[_inputAmount + (_isBias ? 1 : 0)];
-            prevDelta = new double[_inputAmount + (_isBias ? 1 : 0)];
+            prevDelta = new double[_inputAmount + (_isBias ? 1 : 0)]; // todo: Ilość poprzednich błędów zależy ilości epok
             id = _id;
             isBiasWeights = _isBias;
+        }
+
+        public void process(double[] _input)
+        {
+            activateFunction.initFunction(_input, weights);
+
+            outputAdder = activateFunction.adderValue;
+            output = activateFunction.outputValue;
         }
 
         /// <summary>
@@ -77,43 +93,14 @@ namespace IAD_2
             }
         }
 
-        /// <summary>
-        /// Funkcja zwraca wyjście neuronu.
-        /// </summary>
-        /// <param name="_input"> Wektor wejściowy </param>
-        /// <returns></returns>
-        public int neuronOutput(int[] _input)
+        public void neuronError(double _neuronOutput, int _targetValue)
         {
-            output = activateFunction.getNeuronOutput(_input, weights, id);
-
-            return output;
+            error = activateFunction.computeError(_neuronOutput, _targetValue);
         }
-
-        public void neuronError(int _neuronOutput, int _targetValue)
-        {
-            this.setError(activateFunction.computeError(_neuronOutput, _targetValue));
-        }
-
-        #region Get/Set error
-        public void setError(double _err)
-        {
-            error = _err;
-        }
-
-        public double getError()
-        {
-            return error;
-        }
-        #endregion
 
         public double getWeight(int _idx)
         {
             return weights[_idx];
-        }
-
-        public double[] getWeights()
-        {
-            return weights;
         }
 
         public double getNeuronDeriative()
@@ -121,15 +108,7 @@ namespace IAD_2
             return activateFunction.getNeuronDeriativeOutput();
         }
 
-        public void setPrevDelta(int _idx, double _value)
-        {
-            this.prevDelta[_idx] = _value;
-        }
 
-        public void setWeight(int _idx, double _value)
-        {
-            this.weights[_idx] = _value;
-        }
         public override string ToString()
         {
             string ret;
