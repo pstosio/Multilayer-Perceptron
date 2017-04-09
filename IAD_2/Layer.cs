@@ -16,7 +16,7 @@ namespace IAD_2
         /// Numer identyfikacyjny warstwy
         /// </summary>
         int id;
-        
+
         /// <summary>
         /// Lista przechowująca neurony warstwy
         /// </summary>
@@ -36,6 +36,7 @@ namespace IAD_2
         /// Czy wprowadzić na warstwie dodatkowy neuron - bias
         /// </summary>
         public bool hasBias;
+
         #endregion
 
         /// <summary>
@@ -53,13 +54,13 @@ namespace IAD_2
             id = _id;
 
             /**** WEKTOR WEJŚCIOWY I WYŚCIOWY WARSTWY ***/
-            input = new double[_inputAmount];   
-            output = new double[neuronsInLayer]; 
+            input = new double[_inputAmount];
+            output = new double[neuronsInLayer];
             /*********************************************/
 
             neurons = new List<Neuron>(neuronsInLayer);
 
-            for(int i=0; i < neuronsInLayer; i++)
+            for (int i = 0; i < neuronsInLayer; i++)
             {
                 neurons.Add(new Neuron(_activateFunction, _inputAmount, i));
             }
@@ -74,11 +75,11 @@ namespace IAD_2
         {
             input = _inputValues;
 
-            for(int i=0; i<neurons.Count; i++)
+            for (int i = 0; i < neurons.Count; i++)
             {
                 neurons[i].process(input);
 
-                output[i] = neurons[i].output;
+                output[i] = neurons[i].outputValue;
             }
         }
 
@@ -86,11 +87,11 @@ namespace IAD_2
         /// Dla każdego neuronu warstwy ustawiamy wartość błędu
         /// Funkcja jedynie dla ostatniej warstwy - podajemy wartości oczekiwane
         /// </summary>
-        public void countErrorLastLayer(int[] _expectedOutput)
+        public void countErrorLastLayer(int[] _expected)
         {
             for(int i=0; i<neurons.Count; i++)
             {
-                neurons[i].neuronError(output[i], _expectedOutput[i]);
+                neurons[i].error = (neurons[i].outputValue - _expected[i]) * neurons[i].getNeuronDeriative();
             }
         }
 
@@ -100,7 +101,7 @@ namespace IAD_2
 
             ret = String.Format("\n{0} warstwa zawiera {1} neurony: \n", this.id, neurons.Count);
 
-            foreach(Neuron neuron in neurons)
+            foreach (Neuron neuron in neurons)
             {
                 ret += neuron.ToString();
             }

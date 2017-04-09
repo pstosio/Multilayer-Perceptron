@@ -30,14 +30,19 @@ namespace IAD_2
         public double[] weights;
 
         /// <summary>
+        /// Wektor wejściowy neuronu
+        /// </summary>
+        public double[] input;
+
+        /// <summary>
         /// Wartość sumatora neuronu
         /// </summary>
-        public double outputAdder;
+        public double sumator;
 
         /// <summary>
         /// Wartość wyjściowa neuronu
         /// </summary>
-        public double output;
+        public double outputValue;
 
         /// <summary>
         /// Wartość błędu
@@ -73,10 +78,12 @@ namespace IAD_2
 
         public void process(double[] _input)
         {
-            activateFunction.initFunction(_input, weights);
+            input = _input;
 
-            outputAdder = activateFunction.adderValue;
-            output = activateFunction.outputValue;
+            activateFunction.initFunction(input, weights);
+
+            sumator = activateFunction.adderValue;
+            outputValue = activateFunction.outputValue;
         }
 
         /// <summary>
@@ -91,16 +98,6 @@ namespace IAD_2
                 rand = new Random(Guid.NewGuid().GetHashCode());
                 weights[i] = rand.NextDouble() * 2 - 1;
             }
-        }
-
-        public void neuronError(double _neuronOutput, int _targetValue)
-        {
-            error = activateFunction.computeError(_neuronOutput, _targetValue);
-        }
-
-        public double getWeight(int _idx)
-        {
-            return weights[_idx];
         }
 
         public double getNeuronDeriative()

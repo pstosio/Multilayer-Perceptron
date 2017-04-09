@@ -14,7 +14,7 @@ namespace IAD_2
         public override void initFunction(double[] _inputValues, double[] _inputWeights)
         {
             inputValues = _inputValues;
-            inputWeights = _inputWeights;
+            weights = _inputWeights;
 
             adderValue = this.getNeuronOutputAdder();
             outputValue = this.getNeuronOutputValue();
@@ -23,11 +23,6 @@ namespace IAD_2
         public override double getNeuronOutputValue()
         {
             return adderValue;
-        }
-
-        public override double computeError(double _input, int target)
-        {
-            throw new NotImplementedException();
         }
 
         public override double getNeuronDeriativeOutput()

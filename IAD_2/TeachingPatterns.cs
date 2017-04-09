@@ -6,6 +6,35 @@ using System.Threading.Tasks;
 
 namespace IAD_2
 {
+    public class RandomTeachingPattern
+    {
+        int pattern = 0;
+        public RandomTeachingPattern()
+        {
+            Random rnd = new Random();
+            pattern = rnd.Next(1, 4);
+        }
+
+        public int[] getTeachingPattern()
+        {
+            switch(pattern)
+            {
+                case 1:
+                    return new int[4] { 1, 0, 0, 0 };
+
+                case 2:
+                    return new int[4] { 0, 1, 0, 0 };
+
+                case 3:
+                    return new int[4] { 0, 0, 1, 0 };
+
+                case 4:
+                    return new int[4] { 0, 0, 0, 1 };
+            }
+
+            return new int[4] { 0, 0, 0, 0 };
+        }
+    }
     public static class TeachingPattern_1
     {
         public static int[] input = new int[4] { 1, 0, 0, 0 };

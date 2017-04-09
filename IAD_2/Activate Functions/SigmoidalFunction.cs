@@ -15,7 +15,7 @@ namespace IAD_2
         public override void initFunction(double[] _inputValues, double[] _inputWeights)
         {
             inputValues = _inputValues;
-            inputWeights = _inputWeights;
+            weights = _inputWeights;
 
             adderValue = this.getNeuronOutputAdder();
             outputValue = this.getNeuronOutputValue();
@@ -27,7 +27,7 @@ namespace IAD_2
         /// <returns></returns>
         public override double getNeuronOutputValue()
         {
-            return (double)(1.0d / (1.0d + Math.Exp(-1.0d * adderValue)));
+            return (double)(1.0d / (1.0d + Math.Exp( - adderValue)));
         }
 
         /// <summary>
@@ -36,19 +36,7 @@ namespace IAD_2
         /// <returns></returns>
         public override double getNeuronDeriativeOutput()
         {
-            return 1.0d * outputValue * (1.0d * outputValue);
+            return outputValue * (1.0d - outputValue);
         }
-
-        public override double computeError(double _neuronOutput, int _target)
-        {
-            double tmpsum = 0.0d;
-            for(int i =0; i<weights.Length; i++)
-            {
-                tmpsum += weights[i] * inputValues[i];
-            }
-
-            return (_neuronOutput - _target) * this.getNeuronDeriativeOutput();
-        }
-
     }
 }

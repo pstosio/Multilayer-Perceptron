@@ -36,7 +36,7 @@ namespace IAD_2
         /// <param name="_activateFunction"> Funkcja aktywacji - Inversion of Control </param>
         public void initLayer(int _id, int _neuronAmount, int _inputAmount, ActivateFunction _activateFunction)
         {
-            layers.Add(new Layer(_id, _neuronAmount, _inputAmount, _activateFunction ));
+            layers.Add(new Layer(_id, _neuronAmount, _inputAmount, _activateFunction));
         }
 
         /// <summary>
@@ -44,9 +44,9 @@ namespace IAD_2
         /// </summary>
         public void randomWeights()
         {
-            foreach(Layer layer in layers)
+            foreach (Layer layer in layers)
             {
-                foreach(Neuron neuron in layer.neurons)
+                foreach (Neuron neuron in layer.neurons)
                 {
                     neuron.generateRandomWeights();
                 }
@@ -56,51 +56,48 @@ namespace IAD_2
         /// <summary>
         /// Algorytm wstecznej propagacji błędów do wywoływania w pętli
         /// </summary>
-        public void backPropagation(double _wspolczynnikNauki, double _wspolczynnikMomentum)
+        public void backPropagation(double _wspolczynnikNauki, double _wspolczynnikMomentum, int[] _input)
         {
-            this.process();
-            this.countErrors();
+            this.forwardPropagation(_input);
+            this.countErrors(_input);
             this.aktualizujWagi(_wspolczynnikMomentum, _wspolczynnikMomentum);
         }
 
         /// <summary>
-        /// Epoka sieci
+        /// Propagowanie w przód
         /// </summary>
-        public void process()
+        public void forwardPropagation(int[] _input)
         {
             /*** 1. Podajemy na wejście sygnał wejściowy - wektor wejściowy ***/
-            int[] input = TeachingPattern_1.input;
-
-            double[] inputDouble = new double[input.Length];
-            for(int i=0; i<input.Length; i++)
+            double[] inputDouble = new double[_input.Length];
+            for (int i = 0; i < _input.Length; i++)
             {
-                inputDouble[i] = Convert.ToDouble(input[i]);
+                inputDouble[i] = Convert.ToDouble(_input[i]);
             }
 
             /*** 2. Obliczamy wartości wyjściowe warstw ***/
-            for(int i=0; i<layers.Count; i++) // Pętla po warstwach sieci
+            for (int i = 0; i < layers.Count; i++) // Pętla po warstwach sieci
             {
-                if(i==0) // Dla pierwszej warstwy podajemy stały wzorzec , int na double
+                if (i == 0) // Dla pierwszej warstwy podajemy stały wzorzec , int na double
                 {
-                    layers[0].process( inputDouble );
+                    layers[0].process(inputDouble);
                 }
                 else // Kolejne warstwy przyjmują wektor wejściowy obliczony przez warstwę poprzedającą
                 {
                     layers[i].process(layers[i - 1].output);
                 }
             }
-
-            this.countErrors();
         }
 
-        public void countErrors()
+        /// <summary>
+        /// Funkcja liczy błędu dla każdego neuronu - OK
+        /// </summary>
+        public void countErrors(int[] _expectedOutput)
         {
-            int[] expectedOutput = TeachingPattern_1.output;
-
             // Sygnał porównujemy z wzorcowym i wyznaczamy błąd
             //  - Wartości wyznaczone w ostatniej warstwie stanowią odpowiedź sieci na podany sygnał wejściowy.
             //  - liczymy błąd dla każdego nauronu rozpoczynając od warstwy ostatniej
-            layers[layers.Count - 1].countErrorLastLayer(expectedOutput);
+            layers[layers.Count - 1].countErrorLastLayer(_expectedOutput);
 
             // Pętla od przedostatniej warstwy do pierwszej
             for (int i = layers.Count - 2; i > 0; i--)
@@ -115,7 +112,7 @@ namespace IAD_2
 
                     foreach (Neuron neuronFromNext in następna.neurons)
                     {
-                        err += neuronFromNext.error * neuronFromNext.getWeight(j);
+                        err += neuronFromNext.error * neuronFromNext.weights[j];
                     }
 
                     aktualna.neurons[j].error = (err * aktualna.neurons[j].getNeuronDeriative());
@@ -145,13 +142,14 @@ namespace IAD_2
                         if (k >= poprzednia.neurons.Count)
                             otrzymanaWartosc = 1.0d;
                         else
-                            otrzymanaWartosc = poprzednia.neurons[k].output;
+                            otrzymanaWartosc = poprzednia.neurons[k].outputValue;
 
                         double pochodna = neuron.getNeuronDeriative();
                         double delta = otrzymanaWartosc * _wspolczynnikNauki * neuron.error;
-                        double nowaWaga = neuron.getWeight(k) + delta + _wspolczynnikMomentum * neuron.prevDelta[k];
+                        double nowaWaga = neuron.weights[k] + delta + _wspolczynnikMomentum * neuron.prevDelta[k];
+
                         neuron.prevDelta[k] = delta;
-                        neuron.weights[k] = nowaWaga; 
+                        neuron.weights[k] = nowaWaga;
                     }
                 }
             }
@@ -159,21 +157,22 @@ namespace IAD_2
 
 
         /// <summary>
-        /// Funkcja liczy błąd całkowity perceptronu - średnia ze wszystkich neuronów
+        /// Błąd średniokwadratowy sieci - OK
         /// </summary>
-        public double overallError()
+        public double sumSquaredError(int[] _expected)
         {
-            List<double> overallError = new List<double>();
+            double error = 0.0d;
 
-            foreach(Layer layer in layers)
+            Layer lastLayer = layers.Last();
+
+            int liczbaWyjscZSieci = layers.Last().output.Length;
+
+            for (int i = 0; i < liczbaWyjscZSieci; i++)
             {
-                foreach(Neuron neuron in layer.neurons)
-                {
-                    overallError.Add(neuron.error);
-                }
+                error += Math.Pow(_expected[i] - lastLayer.output[i], 2);
             }
 
-            return overallError.Average();
+            return error;
         }
 
         public void saveWeights()
@@ -192,7 +191,7 @@ namespace IAD_2
 
             ret = "Zainicjowano następujący perceptron: \n";
 
-            foreach(Layer layer in layers)
+            foreach (Layer layer in layers)
             {
                 ret += layer.ToString();
             }

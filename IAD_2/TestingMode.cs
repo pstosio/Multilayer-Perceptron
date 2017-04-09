@@ -12,6 +12,9 @@ namespace IAD_2
         public TestingMode()
         {
             Perceptron perceptron = new Perceptron(3);
+            RandomTeachingPattern rtp = new RandomTeachingPattern();
+            int[] input = rtp.getTeachingPattern();
+            int[] expected = input; // W naszym przypdku wartości wyjściowe to wejściowe
 
             perceptron.initLayer(1, 4, 4, new DuplicateFunction());
             perceptron.initLayer(2, 2, 4, new SigmoidalFunction());
@@ -19,9 +22,14 @@ namespace IAD_2
 
             perceptron.randomWeights();
 
-            perceptron.process();
+            for (int i = 0; i < 500; i++)
+            {
+                perceptron.randomWeights();
+                perceptron.forwardPropagation(input);
+                perceptron.countErrors(expected);
 
-            Console.WriteLine(perceptron.overallError());
+                Console.WriteLine(perceptron.sumSquaredError(expected));
+            }
 
 
         }

@@ -63,12 +63,6 @@ namespace IAD_2
         /// <returns></returns>
         public abstract double getNeuronDeriativeOutput();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="_neuronOutput"></param>
-        /// <param name="target"></param>
-        /// <returns></returns>
-        public abstract double computeError(double _neuronOutput, int target);
+
     }
 }
