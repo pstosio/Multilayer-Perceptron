@@ -29,15 +29,19 @@ namespace IAD_2
         /// </summary>
         private double[] weights;
 
+        public int output { get; private set; }
+
         /// <summary>
-        /// Waga biasu
+        /// Czy jest waga biasu
         /// </summary>
-        private double biasWeights;
+        private bool isBiasWeights;
 
         /// <summary>
         /// Różnice między błędem a wartością wyjściową
         /// </summary>
-        private double delta;
+        public double delta { get; set; }
+
+        public double[] prevDelta { get; set; }
 
         /// <summary>
         /// Wartość błędu
@@ -50,11 +54,13 @@ namespace IAD_2
         /// </summary>
         /// <param name="_activateFunction"> Funkcja aktywacji </param>
         /// <param name="_inputAmount"> Ilość wejść </param>
-        public Neuron(IActivateFunction _activateFunction, int _inputAmount, int _id)
+        public Neuron(IActivateFunction _activateFunction, int _inputAmount, int _id, bool _isBias = false)
         {
             activateFunction = _activateFunction;
-            weights = new double[_inputAmount];
+            weights = new double[_inputAmount + (_isBias ? 1 : 0)];
+            prevDelta = new double[_inputAmount + (_isBias ? 1 : 0)];
             id = _id;
+            isBiasWeights = _isBias;
         }
 
         /// <summary>
@@ -78,7 +84,9 @@ namespace IAD_2
         /// <returns></returns>
         public int neuronOutput(int[] _input)
         {
-            return activateFunction.getNeuronOutput(_input, weights, id);
+            output = activateFunction.getNeuronOutput(_input, weights, id);
+
+            return output;
         }
 
         public void neuronError(int _neuronOutput, int _targetValue)
@@ -103,11 +111,25 @@ namespace IAD_2
             return weights[_idx];
         }
 
+        public double[] getWeights()
+        {
+            return weights;
+        }
+
         public double getNeuronDeriative()
         {
             return activateFunction.getNeuronDeriativeOutput();
         }
 
+        public void setPrevDelta(int _idx, double _value)
+        {
+            this.prevDelta[_idx] = _value;
+        }
+
+        public void setWeight(int _idx, double _value)
+        {
+            this.weights[_idx] = _value;
+        }
         public override string ToString()
         {
             string ret;

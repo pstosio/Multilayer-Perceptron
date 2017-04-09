@@ -53,13 +53,22 @@ namespace IAD_2
         }
 
         /// <summary>
-        /// Metoda implementująca działanie perceptronu - 1 epoka
+        /// Algorytm wstecznej propagacji błędów do wywoływania w pętli
+        /// </summary>
+        public void backPropagation()
+        {
+            this.process();
+            this.countErrors();
+            this.aktualizujWagi(0.9, 0.0);
+        }
+
+        /// <summary>
+        /// Metoda implementująca działanie perceptronu - zerowa epoka
         /// </summary>
         public void process()
         {
             // 1. Podajemy na wejście sygnał wejściowy - wektor wejściowy
             int[] input = TeachingPatterns.input;
-            int[] expectedOutput = TeachingPatterns.output;
 
             // 2. Obliczamy wartości wyjściowe warstw 
             for(int i=0; i<layers.Count; i++) // Pętla po warstwach sieci
@@ -73,8 +82,13 @@ namespace IAD_2
                     layers[i].process(layers[i - 1].output);
                 }
             }
+        }
 
-            // 3. Sygnał porównujemy z wzorcowym i wyznaczamy błąd
+        public void countErrors()
+        {
+            int[] expectedOutput = TeachingPatterns.output;
+
+            // Sygnał porównujemy z wzorcowym i wyznaczamy błąd
             //  - Wartości wyznaczone w ostatniej warstwie stanowią odpowiedź sieci na podany sygnał wejściowy.
             //  - liczymy błąd dla każdego nauronu rozpoczynając od warstwy ostatniej
             layers[layers.Count - 1].countErrorLastLayer(expectedOutput);
@@ -86,22 +100,53 @@ namespace IAD_2
                 Layer aktualna = layers[i];
 
                 // Pętla po neuronach warstwy aktualnej
-                for(int j=0; j < aktualna.neurons.Count; j++)
+                for (int j = 0; j < aktualna.neurons.Count; j++)
                 {
                     double err = 0.0d;
 
-                    foreach(Neuron neuronFromNext in następna.neurons)
+                    foreach (Neuron neuronFromNext in następna.neurons)
                     {
                         err += neuronFromNext.getError() * neuronFromNext.getWeight(j);
                     }
 
-                    aktualna.neurons[j].setError(err * aktualna.neurons[j].getNeuronDeriative()); 
+                    aktualna.neurons[j].setError(err * aktualna.neurons[j].getNeuronDeriative());
                 }
             }
-
-            // 4. Ppropagujemy błąd wstecz sieci i dokonujemy korekty wartości wag połączeń synaptycznych
         }
 
+        /// <summary>
+        /// Funkcja dokonuje korekty wartości wag połączeń synaptycznych, propaguje błąd wstecz sieci
+        /// </summary>
+        /// <param name="_wspolczynnikNauki"></param>
+        /// <param name="_wspolczynnikMomentum"></param>
+        public void aktualizujWagi(double _wspolczynnikNauki, double _wspolczynnikMomentum)
+        {
+            for (int i = 1; i < layers.Count; i++)
+            {
+                Layer aktualna = layers[i];
+                Layer poprzednia = layers[i - 1];
+
+                for (int j = 0; j < aktualna.neurons.Count; j++)
+                {
+                    Neuron neuron = aktualna.neurons[j];
+
+                    for (int k = 0; k < neuron.getWeights().Length; k++)
+                    {
+                        double otrzymanaWartosc = 0.0d;
+                        if (k >= poprzednia.neurons.Count)
+                            otrzymanaWartosc = 1.0d;
+                        else
+                            otrzymanaWartosc = poprzednia.neurons[k].output;
+
+                        double pochodna = neuron.getNeuronDeriative();
+                        double delta = otrzymanaWartosc * _wspolczynnikNauki * neuron.getError();
+                        double nowaWaga = neuron.getWeight(k) + delta + _wspolczynnikMomentum * neuron.prevDelta[k];
+                        neuron.setPrevDelta(k, delta);
+                        neuron.setWeight(k, nowaWaga); 
+                    }
+                }
+            }
+        }
 
         public override string ToString()
         {

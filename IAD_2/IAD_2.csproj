@@ -46,7 +46,6 @@
     <Compile Include="Activate Functions\DuplicateFunction.cs" />
     <Compile Include="Activate Functions\IActivateFunction.cs" />
     <Compile Include="Layer.cs" />
-    <Compile Include="NetworkProperty.cs" />
     <Compile Include="Neuron.cs" />
     <Compile Include="Perceptron.cs" />
     <Compile Include="Program.cs" />

@@ -59,7 +59,7 @@ namespace IAD_2
         /// </summary>
         /// <param name="_inputValues"> Wektor wejściowy warstwy. </param>
         /// <returns></returns>
-        public int[] process(int[] _inputValues)
+        public void process(int[] _inputValues)
         {
             input = _inputValues;
 
@@ -67,8 +67,6 @@ namespace IAD_2
             {
                 output[i] = (neurons[i].neuronOutput(input));
             }
-
-            return output;
         }
 
         /// <summary>
