@@ -15,7 +15,7 @@ namespace IAD_2
         /// <summary>
         /// Numer identyfikacyjny warstwy
         /// </summary>
-        int id;
+        public int id;
 
         /// <summary>
         /// Lista przechowująca neurony warstwy
@@ -31,12 +31,6 @@ namespace IAD_2
         /// Wektor wyjściowy warstwy
         /// </summary>
         public double[] output;
-
-        /// <summary>
-        /// Czy wprowadzić na warstwie dodatkowy neuron - bias
-        /// </summary>
-        public bool hasBias;
-
         #endregion
 
         /// <summary>
@@ -46,23 +40,19 @@ namespace IAD_2
         /// <param name="_neuronAmount"> Ilośc neuronów w warstwie. </param>
         /// <param name="_inputAmount"> Ilość wejść - długość wektora wejściowego.</param>
         /// <param name="_activateFunction"> Funkcja aktywacji neuronów w warstwie. </param>
-        public Layer(int _id, int _neuronAmount, int _inputAmount, ActivateFunction _activateFunction, bool _hasBias = false)
+        /// <param name="_isBias"> Czy neurony warstwy mają posiadać wagę biasu? </param>
+        public Layer(int _id, int _neuronAmount, int _inputAmount, IActivateFunction _activateFunction, bool _isBias)
         {
-            // Warstwa która posiada bias, ma mieć o jeden neuron więcej, który zawsze dostaje 1
-            int neuronsInLayer = _hasBias ? _neuronAmount + 1 : _neuronAmount;
-
             id = _id;
 
-            /**** WEKTOR WEJŚCIOWY I WYŚCIOWY WARSTWY ***/
             input = new double[_inputAmount];
-            output = new double[neuronsInLayer];
-            /*********************************************/
+            output = new double[_neuronAmount];
 
-            neurons = new List<Neuron>(neuronsInLayer);
+            neurons = new List<Neuron>(_neuronAmount);
 
-            for (int i = 0; i < neuronsInLayer; i++)
+            for (int i = 0; i < _neuronAmount; i++)
             {
-                neurons.Add(new Neuron(_activateFunction, _inputAmount, i));
+                neurons.Add(new Neuron(_activateFunction, _inputAmount, i, _isBias));
             }
         }
 
@@ -80,18 +70,6 @@ namespace IAD_2
                 neurons[i].process(input);
 
                 output[i] = neurons[i].outputValue;
-            }
-        }
-
-        /// <summary>
-        /// Dla każdego neuronu warstwy ustawiamy wartość błędu
-        /// Funkcja jedynie dla ostatniej warstwy - podajemy wartości oczekiwane
-        /// </summary>
-        public void countErrorLastLayer(int[] _expected)
-        {
-            for(int i=0; i<neurons.Count; i++)
-            {
-                neurons[i].error = (neurons[i].outputValue - _expected[i]) * neurons[i].getNeuronDeriative();
             }
         }
 

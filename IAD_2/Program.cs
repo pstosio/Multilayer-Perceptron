@@ -12,6 +12,7 @@ namespace IAD_2
         {
             TestingMode test = new TestingMode();
 
+            //Console.Write((double)(1.0d / (1.0d + Math.Exp(-36.5))));
             Console.ReadLine();
         }
     }

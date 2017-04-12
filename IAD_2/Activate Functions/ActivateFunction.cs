@@ -6,63 +6,31 @@ using System.Threading.Tasks;
 
 namespace IAD_2
 {
-    public abstract class ActivateFunction
+    public interface IActivateFunction
     {
-        /// <summary>
-        /// Wartości wejściowe
-        /// </summary>
-        public double[] inputValues;
-
-        /// <summary>
-        /// Wagi
-        /// </summary>
-        public double[] weights;
-
-        /// <summary>
-        /// Wartośc sumatora
-        /// </summary>
-        public double adderValue;
-
-        /// <summary>
-        /// Wartość funkcji aktywacji
-        /// </summary>
-        public double outputValue;
-
         /// <summary>
         /// Funkcja inicjuje liczenie sumatora i wartości wyjściowej neuronu
         /// </summary>
         /// <param name="_input"></param>
         /// <param name="_weights"></param>
         /// <returns></returns>
-        public abstract void initFunction(double[] _input, double[] _weights);
+        void initFunction(double[] _input, double[] _weights);
 
         /// <summary>
-        /// Funkcja zwraca sumę iloczynu wektora wejściowego z wagami neuronu - sumator
+        /// Funkcja zwraca sumator (sumę iloczynu wektora wejściowego i wag neuronu)
         /// </summary>
-        public double getNeuronOutputAdder()
-        {
-            double sum = 0d;
+        double getNeuronAdder();
 
-            if (weights.Length != inputValues.Length)
-                throw new Exception("Niepoprawne wektory wag..");
-
-            for (int i = 0; i < inputValues.Length; i++)
-                sum += inputValues[i] * weights[i];
-
-            return sum;
-        }
         /// <summary>
         /// Funkcja liczy wyjście danego neuronu obliczone z funkcji aktywacji
         /// </summary>
         /// <returns></returns>
-        public abstract double getNeuronOutputValue();
+        double getNeuronOutputValue();
 
         /// <summary>
-        /// 
+        /// Funkca liczy pochodną wyjścia 
         /// </summary>
         /// <returns></returns>
-        public abstract double getNeuronDeriativeOutput();
-
-
+        double getNeuronDeriativeOutput();
     }
 }

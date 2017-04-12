@@ -15,24 +15,24 @@ namespace IAD_2
             pattern = rnd.Next(1, 4);
         }
 
-        public int[] getTeachingPattern()
+        public double[] getTeachingPattern()
         {
             switch(pattern)
             {
                 case 1:
-                    return new int[4] { 1, 0, 0, 0 };
+                    return new double[4] { 1, 0, 0, 0 };
 
                 case 2:
-                    return new int[4] { 0, 1, 0, 0 };
+                    return new double[4] { 0, 1, 0, 0 };
 
                 case 3:
-                    return new int[4] { 0, 0, 1, 0 };
+                    return new double[4] { 0, 0, 1, 0 };
 
                 case 4:
-                    return new int[4] { 0, 0, 0, 1 };
+                    return new double[4] { 0, 0, 0, 1 };
             }
 
-            return new int[4] { 0, 0, 0, 0 };
+            return new double[4] { 0, 0, 0, 0 };
         }
     }
     public static class TeachingPattern_1

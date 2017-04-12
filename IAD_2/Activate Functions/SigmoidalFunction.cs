@@ -9,32 +9,58 @@ namespace IAD_2
     /// <summary>
     /// Sigmoidalna funkcja aktywacji
     /// </summary>
-    public sealed class SigmoidalFunction : ActivateFunction
+    public sealed class SigmoidalFunction : IActivateFunction
     {
+        #region
+        /// <summary>
+        /// Wartości wejściowe
+        /// </summary>
+        public double[] inputValues;
 
-        public override void initFunction(double[] _inputValues, double[] _inputWeights)
+        /// <summary>
+        /// Wagi
+        /// </summary>
+        public double[] weights;
+
+        /// <summary>
+        /// Wartośc sumatora
+        /// </summary>
+        public double adderValue;
+
+        /// <summary>
+        /// Wartość funkcji aktywacji
+        /// </summary>
+        public double outputValue;
+        #endregion
+
+        public void initFunction(double[] _inputValues, double[] _inputWeights)
         {
             inputValues = _inputValues;
             weights = _inputWeights;
 
-            adderValue = this.getNeuronOutputAdder();
+            adderValue = this.getNeuronAdder();
             outputValue = this.getNeuronOutputValue();
         }
 
-        /// <summary>
-        /// Funkcja sigmoidalna unipolarna
-        /// </summary>
-        /// <returns></returns>
-        public override double getNeuronOutputValue()
+        public double getNeuronAdder()
+        {
+            double sum = 0d;
+
+            if (weights.Length != inputValues.Length)
+                throw new Exception("Niepoprawne wektory wag..");
+
+            for (int i = 0; i < inputValues.Length; i++)
+                sum += inputValues[i] * weights[i];
+
+            return sum;
+        }
+
+        public double getNeuronOutputValue()
         {
             return (double)(1.0d / (1.0d + Math.Exp( - adderValue)));
         }
 
-        /// <summary>
-        /// Pochodna
-        /// </summary>
-        /// <returns></returns>
-        public override double getNeuronDeriativeOutput()
+        public double getNeuronDeriativeOutput()
         {
             return outputValue * (1.0d - outputValue);
         }
