@@ -6,18 +6,17 @@ using System.Threading.Tasks;
 
 namespace IAD_2
 {
-    public class RandomTeachingPattern
+    public class TeachingPatterns
     {
+        Random rnd;
         int pattern = 0;
-        public RandomTeachingPattern()
-        {
-            Random rnd = new Random();
-            pattern = rnd.Next(1, 4);
-        }
 
-        public double[] getTeachingPattern()
+        public double[] getRandomTeachingPattern()
         {
-            switch(pattern)
+            rnd = new Random(Guid.NewGuid().GetHashCode());
+            pattern = rnd.Next(1, 4);
+
+            switch (pattern)
             {
                 case 1:
                     return new double[4] { 1, 0, 0, 0 };
@@ -34,28 +33,25 @@ namespace IAD_2
 
             return new double[4] { 0, 0, 0, 0 };
         }
-    }
-    public static class TeachingPattern_1
-    {
-        public static int[] input = new int[4] { 1, 0, 0, 0 };
-        public static int[] output = new int[4] { 1, 0, 0, 0 };
-    }
 
-    public static class TeachingPattern_2
-    {
-        public static int[] input = new int[4] { 0, 1, 0, 0 };
-        public static int[] output = new int[4] { 0, 1, 0, 0 };
-    }
+        public double[] getTeachingPattern(int _patterNum)
+        {
+            switch (_patterNum)
+            {
+                case 1:
+                    return new double[4] { 1, 0, 0, 0 };
 
-    public static class TeachingPattern_3
-    {
-        public static int[] input = new int[4] { 0, 0, 1, 0 };
-        public static int[] output = new int[4] { 0, 0, 1, 0 };
-    }
+                case 2:
+                    return new double[4] { 0, 1, 0, 0 };
 
-    public static class TeachingPattern_4
-    {
-        public static int[] input = new int[4] { 0, 0, 0, 1 };
-        public static int[] output = new int[4] { 0, 0, 0, 1 };
+                case 3:
+                    return new double[4] { 0, 0, 1, 0 };
+
+                case 4:
+                    return new double[4] { 0, 0, 0, 1 };
+            }
+
+            return new double[4] { 0, 0, 0, 0 };
+        }
     }
 }

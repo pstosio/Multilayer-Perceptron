@@ -78,11 +78,9 @@ namespace IAD_2
         public Neuron(IActivateFunction _activateFunction, int _inputAmount, int _id, bool _isBias)
         { 
             activateFunction = _activateFunction;
-
             weights = new double[_inputAmount + (_isBias ? 1 : 0)];
             prevWeights = new double[_inputAmount + (_isBias ? 1 : 0)];
             prevDelta = new double[_inputAmount + (_isBias ? 1 : 0)];
-
             id = _id;
             isBias = _isBias;
         }
@@ -90,9 +88,7 @@ namespace IAD_2
         public void process(double[] _input)
         {
             input = _input;
-
             activateFunction.initFunction(input, weights);
-
             adder = activateFunction.getNeuronAdder();
             outputValue = activateFunction.getNeuronOutputValue();
             deriative = activateFunction.getNeuronDeriativeOutput();
@@ -104,7 +100,6 @@ namespace IAD_2
         public void generateRandomWeights()
         {
             Random rand;
-
             for(int i=0; i<weights.Length; i++)
             {
                 rand = new Random(Guid.NewGuid().GetHashCode());
@@ -115,14 +110,11 @@ namespace IAD_2
         public override string ToString()
         {
             string ret;
-            
             ret = String.Format("   Neuron {0}, wagi: \n", id);
-
             for(int i=0; i<weights.Length; i++)
             {
                 ret += String.Format("      - waga {0} : {1} \n", i, weights[i]);
             }
-
             return ret;
         }
     }

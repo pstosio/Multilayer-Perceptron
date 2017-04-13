@@ -16,6 +16,11 @@ namespace IAD_2
         /// Warstwy sieci neuronowej
         /// </summary>
         private List<Layer> layers;
+
+        /// <summary>
+        /// Błąd średniokwadratowy sieci
+        /// </summary>
+        public double sumSquaredError;
         #endregion
 
         /// <summary>
@@ -56,11 +61,11 @@ namespace IAD_2
         /// <summary>
         /// Algorytm wstecznej propagacji błędów do wywoływania w pętli
         /// </summary>
-        public void backPropagation(double _wspolczynnikNauki, double _wspolczynnikMomentum, double[] _input, double[] _expected)
+        public void backPropagation(double _learningFaktor, double _momentum, double[] _input, double[] _expected)
         {
             this.forwardPropagation(_input);
             this.countErrors(_expected);
-            this.updateWeights(_wspolczynnikNauki, _wspolczynnikMomentum);
+            this.updateWeights(_learningFaktor, _momentum);
         }
 
         /// <summary>
@@ -117,29 +122,45 @@ namespace IAD_2
         }
 
         /// <summary>
-        /// Błąd średniokwadratowy sieci - OK
+        /// Błąd średniokwadratowy sieci 
         /// </summary>
-        public double sumSquaredError(double[] _expected)
+        public void addSumSquaredError(double[] _expected)
         {
-            double error = 0.0d;
-
             Layer lastLayer = layers.Last();
 
-            int liczbaWyjscZSieci = layers.Last().output.Length;
-
-            for (int i = 0; i < liczbaWyjscZSieci; i++)
+            for (int i = 0; i < layers.Last().output.Length; i++)
             {
-                error += _expected[i] - lastLayer.output[i];
+                sumSquaredError += _expected[i] - lastLayer.output[i];
             }
 
-            error = Math.Pow(error, 2) / 2;
+        }
 
-            return error;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public void estimateSumSquaredError()
+        {
+            sumSquaredError = Math.Pow(sumSquaredError, 2) / 2;
+        }
+
+        public double getSumSquaredError()
+        {
+            return sumSquaredError;
+        }
+
+        public void resetSumSquaredError()
+        {
+            sumSquaredError = 0.0d;
         }
 
         public void saveWeights()
         {
-            FileService fs = new FileService();
+        }
+
+        public void saveErrorToFile()
+        {
+            FileService.saveToFile(sumSquaredError);
         }
 
         /// <summary>
@@ -147,26 +168,29 @@ namespace IAD_2
         /// </summary>
         /// <param name="_learningFactor"></param>
         /// <param name="_momentumFactor"></param>
-        public void updateWeights(double _learnFactor, double _momentumFactor)
+        public void updateWeights(double _learnFactor, double _momentum)
         {
+            // Pętla po warstwach
             for (int i = 1; i < layers.Count; i++)
             {
-                Layer prevL = layers[i - 1];
-                Layer actual = layers[i];
-                for (int j = 0; j < actual.neurons.Count; j++)
+                Layer prevLayer = layers[i - 1];
+                Layer actualLayer = layers[i];
+
+                for (int j = 0; j < actualLayer.neurons.Count; j++)
                 {
-                    Neuron neuron = actual.neurons[j];
+                    Neuron neuron = actualLayer.neurons[j];
+
                     for (int k = 0; k < neuron.weights.Length; k++)
                     {
                         double tmpValue = 0.0d;
-                        if (k >= prevL.neurons.Count)
+                        if (k >= prevLayer.neurons.Count)
                             tmpValue = 1.0d;
                         else
-                            tmpValue = prevL.neurons[k].outputValue;
+                            tmpValue = prevLayer.neurons[k].outputValue;
 
                         double derivative = neuron.deriative;
                         double delta = derivative * tmpValue * _learnFactor * neuron.error;
-                        double newWeight = neuron.weights[k] + delta + neuron.prevDelta[k] * _momentumFactor;
+                        double newWeight = neuron.weights[k] + delta +  _momentum * neuron.prevDelta[k];
                         neuron.prevDelta[k] = delta;
                         neuron.weights[k] = newWeight;
                     }

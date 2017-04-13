@@ -10,9 +10,14 @@ namespace IAD_2
     {
         static void Main(string[] args)
         {
-            TestingMode test = new TestingMode();
+            Perceptron perceptron = new Perceptron(3);
 
-            //Console.Write((double)(1.0d / (1.0d + Math.Exp(-36.5))));
+            perceptron.initLayer(1, 4, 4, new DuplicateFunction(), false);
+            perceptron.initLayer(2, 2, 4, new SigmoidalFunction(), false);
+            perceptron.initLayer(3, 4, 2, new SigmoidalFunction(), false);
+
+            TeachingMode teach = new TeachingMode(perceptron, 1000, 1, 0.01, false, 0.9, 0.6);
+
             Console.ReadLine();
         }
     }

@@ -44,10 +44,8 @@ namespace IAD_2
         public Layer(int _id, int _neuronAmount, int _inputAmount, IActivateFunction _activateFunction, bool _isBias)
         {
             id = _id;
-
             input = new double[_inputAmount];
             output = new double[_neuronAmount];
-
             neurons = new List<Neuron>(_neuronAmount);
 
             for (int i = 0; i < _neuronAmount; i++)
@@ -68,7 +66,6 @@ namespace IAD_2
             for (int i = 0; i < neurons.Count; i++)
             {
                 neurons[i].process(input);
-
                 output[i] = neurons[i].outputValue;
             }
         }
@@ -76,14 +73,11 @@ namespace IAD_2
         public override string ToString()
         {
             string ret;
-
             ret = String.Format("\n{0} warstwa zawiera {1} neurony: \n", this.id, neurons.Count);
-
             foreach (Neuron neuron in neurons)
             {
                 ret += neuron.ToString();
             }
-
             return ret;
         }
     }
