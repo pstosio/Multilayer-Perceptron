@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace IAD_2
 {
@@ -46,6 +45,9 @@ namespace IAD_2
 
                 perceptron.resetSumSquaredError();
             }
+
+            
+
         }
     }
 }

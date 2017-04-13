@@ -158,9 +158,19 @@ namespace IAD_2
         {
         }
 
+        public void uploadWeights()
+        {
+
+        }
+
         public void saveErrorToFile()
         {
             FileService.saveToFile(sumSquaredError);
+        }
+
+        public void saveErrorChart()
+        {
+           
         }
 
         /// <summary>

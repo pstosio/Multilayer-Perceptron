@@ -103,7 +103,7 @@ namespace IAD_2
             for(int i=0; i<weights.Length; i++)
             {
                 rand = new Random(Guid.NewGuid().GetHashCode());
-                weights[i] = rand.NextDouble() * 2 - 1;
+                weights[i] = rand.NextDouble() * (0.5 + 0.5) - 0.5; // * (maximum - minimum ) + minimum
             }
         }
 
