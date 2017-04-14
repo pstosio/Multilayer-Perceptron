@@ -22,7 +22,7 @@ namespace IAD_2
         /// <summary>
         /// Funkcja aktywacji - dependency injection
         /// </summary>
-        private IActivateFunction activateFunction; 
+        private IActivateFunction activateFunction;
 
         /// <summary>
         /// Wektor wag neuronu
@@ -76,7 +76,7 @@ namespace IAD_2
         /// <param name="_activateFunction"> Funkcja aktywacji </param>
         /// <param name="_inputAmount"> Ilość wejść </param>
         public Neuron(IActivateFunction _activateFunction, int _inputAmount, int _id, bool _isBias)
-        { 
+        {
             activateFunction = _activateFunction;
             weights = new double[_inputAmount + (_isBias ? 1 : 0)];
             prevWeights = new double[_inputAmount + (_isBias ? 1 : 0)];
@@ -87,7 +87,22 @@ namespace IAD_2
 
         public void process(double[] _input)
         {
-            input = _input;
+            if (isBias)
+            {
+                input = new double[_input.Length + 1];
+                for (int i = 0; i < _input.Length + 1; i++)
+                {
+                    if (i == 0)
+                        input[i] = 1; // Zerowa waga biasu na wejście otrzymuje zawsze wartość 1
+                    else
+                        input[i] = _input[i - 1];
+                }
+            }
+            else
+            {
+                input = _input;
+            }
+
             activateFunction.initFunction(input, weights);
             adder = activateFunction.getNeuronAdder();
             outputValue = activateFunction.getNeuronOutputValue();
@@ -100,7 +115,7 @@ namespace IAD_2
         public void generateRandomWeights()
         {
             Random rand;
-            for(int i=0; i<weights.Length; i++)
+            for (int i = 0; i < weights.Length; i++)
             {
                 rand = new Random(Guid.NewGuid().GetHashCode());
                 weights[i] = rand.NextDouble() * (0.5 + 0.5) - 0.5; // * (maximum - minimum ) + minimum
@@ -111,10 +126,12 @@ namespace IAD_2
         {
             string ret;
             ret = String.Format("   Neuron {0}, wagi: \n", id);
-            for(int i=0; i<weights.Length; i++)
+            for (int i = 0; i < weights.Length; i++)
             {
                 ret += String.Format("      - waga {0} : {1} \n", i, weights[i]);
             }
+            ret += String.Format("Odpowiedź neuronu: {0} \n", outputValue);
+
             return ret;
         }
     }

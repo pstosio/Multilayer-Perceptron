@@ -33,10 +33,10 @@ namespace IAD_2
         public double outputValue;
         #endregion
 
-        public void initFunction(double[] _inputValues, double[] _inputWeights)
+        public void initFunction(double[] _inputValues, double[] _neuronWeights)
         {
             inputValues = _inputValues;
-            weights = _inputWeights;
+            weights = _neuronWeights;
 
             adderValue = this.getNeuronAdder();
             outputValue = this.getNeuronOutputValue();

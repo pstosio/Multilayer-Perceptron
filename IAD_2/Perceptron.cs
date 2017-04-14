@@ -267,7 +267,6 @@ namespace IAD_2
         public override string ToString()
         {
             string ret;
-
             ret = "Zainicjowano następujący perceptron: \n";
 
             foreach (Layer layer in layers)
