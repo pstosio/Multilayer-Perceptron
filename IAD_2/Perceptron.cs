@@ -117,12 +117,16 @@ namespace IAD_2
             {
                 Layer nextLayer = layers[i + 1];
                 Layer actual = layers[i];
+
                 for (int j = 0; j < actual.neurons.Count; j++)
                 {
+                    bool hasBias = actual.neurons[j].isBias;
+                    int shift = hasBias ? 1 : 0;
                     double errTmp = 0.0d;
+
                     foreach (Neuron neuronFromNextLayer in nextLayer.neurons)
                     {
-                        errTmp += neuronFromNextLayer.error * neuronFromNextLayer.weights[j];
+                        errTmp += neuronFromNextLayer.error * neuronFromNextLayer.weights[j + shift]; // <== Trzeba przesunąć jeżeli neuron z kolejnej warstwy posiada bias
                     }
                     actual.neurons[j].error = errTmp * actual.neurons[j].deriative;
                 }
@@ -145,7 +149,6 @@ namespace IAD_2
 
             sumSquaredErrorTotal += sumSquaredError;
             sumSquaredError = 0.0d;
-
         }
 
         /// <summary>

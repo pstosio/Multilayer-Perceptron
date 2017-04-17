@@ -33,7 +33,7 @@ namespace IAD_2
         public double outputValue;
         #endregion
 
-        public void initFunction(double[] _inputValues, double[] _neuronWeights)
+        public void initFunction(double[] _inputValues, double[] _neuronWeights, int _id = 0)
         {
             inputValues = _inputValues;
             weights = _neuronWeights;

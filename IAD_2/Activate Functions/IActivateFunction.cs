@@ -14,7 +14,7 @@ namespace IAD_2
         /// <param name="_input"></param>
         /// <param name="_weights"></param>
         /// <returns></returns>
-        void initFunction(double[] _input, double[] _weights);
+        void initFunction(double[] _input, double[] _weights, int _id = 0);
 
         /// <summary>
         /// Funkcja zwraca sumator (sumę iloczynu wektora wejściowego i wag neuronu)

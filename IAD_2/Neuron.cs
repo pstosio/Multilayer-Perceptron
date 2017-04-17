@@ -42,7 +42,7 @@ namespace IAD_2
         /// <summary>
         /// Czy jest waga biasu
         /// </summary>
-        private bool isBias;
+        public bool isBias;
 
         /// <summary>
         /// Wektor wejściowy neuronu
@@ -77,12 +77,12 @@ namespace IAD_2
         /// <param name="_inputAmount"> Ilość wejść </param>
         public Neuron(IActivateFunction _activateFunction, int _inputAmount, int _id, bool _isBias)
         {
-            activateFunction = _activateFunction;
-            weights = new double[_inputAmount + (_isBias ? 1 : 0)];
-            prevWeights = new double[_inputAmount + (_isBias ? 1 : 0)];
-            prevDelta = new double[_inputAmount + (_isBias ? 1 : 0)];
             id = _id;
             isBias = _isBias;
+            activateFunction = _activateFunction;
+            weights     = new double[_inputAmount + (isBias ? 1 : 0)];
+            prevWeights = new double[_inputAmount + (isBias ? 1 : 0)];
+            prevDelta   = new double[_inputAmount + (isBias ? 1 : 0)];
         }
 
         public void process(double[] _input)
@@ -103,7 +103,7 @@ namespace IAD_2
                 input = _input;
             }
 
-            activateFunction.initFunction(input, weights);
+            activateFunction.initFunction(input, weights, id);
 
             adder = activateFunction.getNeuronAdder();
             outputValue = activateFunction.getNeuronOutputValue();

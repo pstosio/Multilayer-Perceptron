@@ -44,8 +44,8 @@ namespace IAD_2
         public Layer(int _id, int _neuronAmount, int _inputAmount, IActivateFunction _activateFunction, bool _isBias)
         {
             id = _id;
-            input = new double[_inputAmount];
-            output = new double[_neuronAmount];
+            input   = new double[_inputAmount];
+            output  = new double[_neuronAmount];
             neurons = new List<Neuron>(_neuronAmount);
 
             for (int i = 0; i < _neuronAmount; i++)

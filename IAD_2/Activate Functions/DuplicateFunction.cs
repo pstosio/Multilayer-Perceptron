@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace IAD_2
 {
     /// <summary>
-    /// Powielająca funkcja aktywacji
+    /// Powielająca funkcja aktywacji 
     /// </summary>
     public sealed class DuplicateFunction : IActivateFunction
     {
@@ -33,13 +33,13 @@ namespace IAD_2
         public double outputValue;
         #endregion
 
-        public void initFunction(double[] _inputValues, double[] _inputWeights)
+        public void initFunction(double[] _inputValues, double[] _inputWeights, int _id = 0)
         {
             inputValues = _inputValues;
             weights = _inputWeights;
 
             adderValue = this.getNeuronAdder();
-            outputValue = this.getNeuronOutputValue();
+            outputValue = _inputValues[_id];//  this.getNeuronOutputValue();
         }
 
         public double getNeuronAdder()
