@@ -28,11 +28,13 @@ namespace IAD_2
 
             if (learnMode == true)
             {
-                teach = new TeachingMode(perceptron, 200, 1, false, 0.9, 0.6);
+                teach = new TeachingMode(perceptron, 1000, 1, true, 0.2, 0.9);
                 perceptron.saveWeightsToFile();
             }
             else
                 test = new TestingMode(perceptron);
+
+            perceptron.ToString();
 
             ErrorLineChart elc = new ErrorLineChart();
             System.Windows.Forms.Application.Run(elc);
