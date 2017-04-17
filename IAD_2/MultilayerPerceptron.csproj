@@ -80,7 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activate Functions\DuplicateFunction.cs" />
-    <Compile Include="Activate Functions\ActivateFunction.cs" />
+    <Compile Include="Activate Functions\IActivateFunction.cs" />
     <Compile Include="ErrorLineChart.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -106,11 +106,13 @@ namespace IAD_2
         public void countErrors(double[] _expectedOutput)
         {
             Layer lastLayer = layers[layers.Count - 1];
+
             for (int i = 0; i < lastLayer.neurons.Count; i++)
             {
                 Neuron neuron = lastLayer.neurons[i];
-                neuron.error = _expectedOutput[i] - neuron.outputValue;
+                neuron.error = (_expectedOutput[i] - neuron.outputValue) * neuron.deriative;
             }
+
             for (int i = layers.Count - 2; i > 0; i--)
             {
                 Layer nextLayer = layers[i + 1];
@@ -122,7 +124,7 @@ namespace IAD_2
                     {
                         errTmp += neuronFromNextLayer.error * neuronFromNextLayer.weights[j];
                     }
-                    actual.neurons[j].error = errTmp;
+                    actual.neurons[j].error = errTmp * actual.neurons[j].deriative;
                 }
             }
         }
@@ -246,7 +248,6 @@ namespace IAD_2
             // Pętla po warstwach
             for (int i = 1; i < layers.Count; i++)
             {
-                Layer prevLayer = layers[i - 1];
                 Layer actualLayer = layers[i];
 
                 for (int j = 0; j < actualLayer.neurons.Count; j++)
@@ -255,16 +256,10 @@ namespace IAD_2
 
                     for (int k = 0; k < neuron.weights.Length; k++)
                     {
-                        double tmpValue = 0.0d;
-                        if (k >= prevLayer.neurons.Count)
-                            tmpValue = 1.0d;
-                        else
-                            tmpValue = prevLayer.neurons[k].outputValue;
-
-                        double derivative = neuron.deriative;
-                        double delta = derivative * tmpValue * _learnFactor * neuron.error;
-                        double newWeight = neuron.weights[k] + delta + _momentum * neuron.prevDelta[k];
+                        double delta = _learnFactor * neuron.error * neuron.input[k] + _momentum * neuron.prevDelta[k];
                         neuron.prevDelta[k] = delta;
+
+                        double newWeight = neuron.weights[k] + delta;
                         neuron.weights[k] = newWeight;
                     }
                 }

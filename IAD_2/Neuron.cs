@@ -104,6 +104,7 @@ namespace IAD_2
             }
 
             activateFunction.initFunction(input, weights);
+
             adder = activateFunction.getNeuronAdder();
             outputValue = activateFunction.getNeuronOutputValue();
             deriative = activateFunction.getNeuronDeriativeOutput();
