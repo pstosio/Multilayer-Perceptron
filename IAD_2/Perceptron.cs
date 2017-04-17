@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace IAD_2
 {
@@ -180,28 +181,60 @@ namespace IAD_2
                     for (int k = 0; k < n.weights.Length; k++)
                     {
                         double tmpWeight = n.weights[k];
-                        string line = String.Format("L:{0} N:{1} W:{2} V:{3}", i, j, k, tmpWeight);
+                        //                       Layer, neuron, weight, value
+                        string line = String.Format("{0} {1} {2} {3}", i, j, k, tmpWeight);
                         FileService.saveToFile(path, line);
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// Wczytanie wag neuronów z pliku
+        /// </summary>
         public void uploadWeights()
         {
+            string path = @"C:\Users\Peter\Desktop\IAD\Zad 2\neuronWeights.txt";
+            try
+            {
+                // Create an instance of StreamReader to read from a file.
+                // The using statement also closes the StreamReader.
+                using (StreamReader sr = new StreamReader(path))
+                {
+                    string line;
 
+                    // Read and display lines from the file until 
+                    // the end of the file is reached. 
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        string[] splittedLine = splittedLine = line.Split(' '); // <-- separator
+                        int layerNum = Convert.ToInt32(splittedLine[0]) - 1; // <== Warstwa
+                        int neuronNum = Convert.ToInt32(splittedLine[1]) - 1; // <== Neuron
+                        int weightNum = Convert.ToInt32(splittedLine[2]); // <== Waga
+                        double weightValue = Convert.ToDouble(splittedLine[3]); // <== Wartość 
+
+                        this.layers[layerNum].neurons[neuronNum].weights[weightNum] = weightValue;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+                // Let the user know what went wrong.
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(e.Message);
+            }
         }
 
+        /// <summary>
+        /// Zapis globalnego błędu średniowadratowego do pliku
+        /// </summary>
         public void saveErrorToFile()
         {
             string path = @"C:\Users\Peter\Desktop\IAD\Zad 2\errorLog.txt";
             FileService.saveToFile(path, Convert.ToString(sumSquaredErrorTotal));
         }
 
-        public void saveErrorChart()
-        {
-
-        }
 
         /// <summary>
         /// Funkcja dokonuje korekty wartości wag połączeń synaptycznych, propaguje błąd wstecz sieci
@@ -305,13 +338,14 @@ namespace IAD_2
                 ret += layer.ToString();
             }
 
+            /*
             Layer firstLayer = layers.First();
             ret += "Wektor wejściowy: \n";
             for (int i = 0; i < firstLayer.input.Length; i++)
             {
                 ret += firstLayer.input[i] + " ";
             }
-
+            */
             return ret;
 
         }

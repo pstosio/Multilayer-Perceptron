@@ -21,8 +21,10 @@ namespace IAD_2
             perceptron.initLayer(2, 2, 4, new SigmoidalFunction(), false);
             perceptron.initLayer(3, 4, 2, new SigmoidalFunction(), false);
 
-            TeachingMode teach = new TeachingMode(perceptron, 100, 1, false, 0.9, 0.6);
-            perceptron.saveWeightsToFile();
+            //TeachingMode teach = new TeachingMode(perceptron, 10000, 100, false, 0.9, 0.6);
+            //perceptron.saveWeightsToFile();
+
+            TestingMode test = new TestingMode(perceptron);
 
             Console.ReadLine();
         }

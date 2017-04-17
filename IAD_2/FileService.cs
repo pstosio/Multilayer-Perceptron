@@ -19,5 +19,10 @@ namespace IAD_2
                 writer.WriteLine(_line);
             }
         }
+
+        public static void importWeight(string _path)
+        {
+            
+        }
     }
 }
