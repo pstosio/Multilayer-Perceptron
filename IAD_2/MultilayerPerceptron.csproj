@@ -96,6 +96,7 @@
     <Compile Include="Activate Functions\SigmoidalFunction.cs" />
     <Compile Include="WorkMode\TeachingMode.cs" />
     <Compile Include="TeachingPatterns.cs" />
+    <Compile Include="WorkMode\TestingMode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

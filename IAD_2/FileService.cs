@@ -12,10 +12,9 @@ namespace IAD_2
     /// </summary>
     public static class FileService
     {
-        public static void saveToFile(double _line)
+        public static void saveToFile(string _path, string _line)
         {
-            string path = @"C:\Users\Peter\Desktop\IAD\Zad 2\errorLog.txt";
-            using (StreamWriter writer = new StreamWriter(path, true)) // true - appending
+            using (StreamWriter writer = new StreamWriter(_path, true)) // true - appending
             {
                 writer.WriteLine(_line);
             }

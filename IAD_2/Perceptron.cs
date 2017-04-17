@@ -164,8 +164,27 @@ namespace IAD_2
             sumSquaredErrorTotal = 0.0d;
         }
 
-        public void saveWeights()
+        /// <summary>
+        /// Zapis wag do pliku
+        /// </summary>
+        public void saveWeightsToFile()
         {
+            string path = @"C:\Users\Peter\Desktop\IAD\Zad 2\neuronWeights.txt";
+            for (int i = 1; i <= layers.Count; i++)
+            {
+                Layer actual = layers[i - 1];
+                for (int j = 1; j <= actual.neurons.Count; j++)
+                {
+                    Neuron n = actual.neurons[j - 1];
+
+                    for (int k = 0; k < n.weights.Length; k++)
+                    {
+                        double tmpWeight = n.weights[k];
+                        string line = String.Format("L:{0} N:{1} W:{2} V:{3}", i, j, k, tmpWeight);
+                        FileService.saveToFile(path, line);
+                    }
+                }
+            }
         }
 
         public void uploadWeights()
@@ -175,7 +194,8 @@ namespace IAD_2
 
         public void saveErrorToFile()
         {
-            FileService.saveToFile(sumSquaredErrorTotal);
+            string path = @"C:\Users\Peter\Desktop\IAD\Zad 2\errorLog.txt";
+            FileService.saveToFile(path, Convert.ToString(sumSquaredErrorTotal));
         }
 
         public void saveErrorChart()
