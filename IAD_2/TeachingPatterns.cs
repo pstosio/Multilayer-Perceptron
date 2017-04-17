@@ -14,7 +14,7 @@ namespace IAD_2
         public double[] getRandomTeachingPattern()
         {
             rnd = new Random(Guid.NewGuid().GetHashCode());
-            pattern = rnd.Next(1, 4);
+            pattern = rnd.Next(1, 5);
 
             switch (pattern)
             {

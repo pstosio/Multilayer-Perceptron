@@ -15,12 +15,17 @@ namespace IAD_2
         /// <summary>
         /// Warstwy sieci neuronowej
         /// </summary>
-        private List<Layer> layers;
+        public List<Layer> layers;
 
         /// <summary>
         /// Błąd średniokwadratowy sieci
         /// </summary>
         public double sumSquaredError;
+
+        /// <summary>
+        /// Bład dla wszystkich zestawów
+        /// </summary>
+        public double sumSquaredErrorTotal;
         #endregion
 
         /// <summary>
@@ -130,8 +135,13 @@ namespace IAD_2
 
             for (int i = 0; i < layers.Last().output.Length; i++)
             {
-                sumSquaredError += _expected[i] - lastLayer.output[i];
+                double expTmp = _expected[i];
+                double outTmp = lastLayer.output[i];
+                sumSquaredError += Math.Pow((expTmp - outTmp), 2);
             }
+
+            sumSquaredErrorTotal += sumSquaredError;
+            sumSquaredError = 0.0d;
 
         }
 
@@ -141,17 +151,17 @@ namespace IAD_2
         /// <returns></returns>
         public void estimateSumSquaredError()
         {
-            sumSquaredError = Math.Pow(sumSquaredError, 2) / 2;
+            sumSquaredErrorTotal = sumSquaredErrorTotal / 2;
         }
 
-        public double getSumSquaredError()
+        public double getTotalSumSquaredError()
         {
-            return sumSquaredError;
+            return sumSquaredErrorTotal;
         }
 
         public void resetSumSquaredError()
         {
-            sumSquaredError = 0.0d;
+            sumSquaredErrorTotal = 0.0d;
         }
 
         public void saveWeights()
@@ -165,12 +175,12 @@ namespace IAD_2
 
         public void saveErrorToFile()
         {
-            FileService.saveToFile(sumSquaredError);
+            FileService.saveToFile(sumSquaredErrorTotal);
         }
 
         public void saveErrorChart()
         {
-           
+
         }
 
         /// <summary>
@@ -200,7 +210,7 @@ namespace IAD_2
 
                         double derivative = neuron.deriative;
                         double delta = derivative * tmpValue * _learnFactor * neuron.error;
-                        double newWeight = neuron.weights[k] + delta +  _momentum * neuron.prevDelta[k];
+                        double newWeight = neuron.weights[k] + delta + _momentum * neuron.prevDelta[k];
                         neuron.prevDelta[k] = delta;
                         neuron.weights[k] = newWeight;
                     }
@@ -208,6 +218,7 @@ namespace IAD_2
             }
         }
 
+        [Obsolete]
         public void DEL_uploadWeights(double _learningFactor, double _momentumFactor)
         {
             // Iteracja po warstwach - od ostatniej
@@ -272,6 +283,13 @@ namespace IAD_2
             foreach (Layer layer in layers)
             {
                 ret += layer.ToString();
+            }
+
+            Layer firstLayer = layers.First();
+            ret += "Wektor wejściowy: \n";
+            for (int i = 0; i < firstLayer.input.Length; i++)
+            {
+                ret += firstLayer.input[i] + " ";
             }
 
             return ret;
