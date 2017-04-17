@@ -24,15 +24,18 @@ namespace IAD_2
             perceptron.initLayer(2, 2, 4, new SigmoidalFunction(), true);
             perceptron.initLayer(3, 4, 2, new SigmoidalFunction(), true);
 
-            bool learnMode = false;
+            bool learnMode = false; // <== Tu można przestawić tryb pracy perceptronu
 
             if (learnMode == true)
             {
-                teach = new TeachingMode(perceptron, 1000, 1, false, 0.9, 0.6);
+                teach = new TeachingMode(perceptron, 200, 1, false, 0.9, 0.6);
                 perceptron.saveWeightsToFile();
             }
             else
                 test = new TestingMode(perceptron);
+
+            ErrorLineChart elc = new ErrorLineChart();
+            System.Windows.Forms.Application.Run(elc);
 
             Console.ReadLine();
         }

@@ -38,7 +38,7 @@ namespace IAD_2
             // cartesianChart1
             // 
             this.cartesianChart1.Hoverable = true;
-            this.cartesianChart1.Location = new System.Drawing.Point(56, 38);
+            this.cartesianChart1.Location = new System.Drawing.Point(12, 12);
             this.cartesianChart1.Name = "cartesianChart1";
             solidColorBrush1.Color = System.Windows.Media.Color.FromArgb(((byte)(30)), ((byte)(30)), ((byte)(30)), ((byte)(30)));
             this.cartesianChart1.ScrollBarFill = solidColorBrush1;
@@ -47,7 +47,7 @@ namespace IAD_2
             this.cartesianChart1.ScrollMode = LiveCharts.ScrollMode.None;
             this.cartesianChart1.ScrollVerticalFrom = 0D;
             this.cartesianChart1.ScrollVerticalTo = 0D;
-            this.cartesianChart1.Size = new System.Drawing.Size(200, 100);
+            this.cartesianChart1.Size = new System.Drawing.Size(1172, 787);
             this.cartesianChart1.TabIndex = 0;
             this.cartesianChart1.Text = "cartesianChart1";
             // 
@@ -55,7 +55,7 @@ namespace IAD_2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(282, 253);
+            this.ClientSize = new System.Drawing.Size(1184, 811);
             this.Controls.Add(this.cartesianChart1);
             this.Name = "ErrorLineChart";
             this.Text = "ErrorLineChart";

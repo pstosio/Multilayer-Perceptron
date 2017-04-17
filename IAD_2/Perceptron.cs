@@ -27,6 +27,7 @@ namespace IAD_2
         /// Bład dla wszystkich zestawów
         /// </summary>
         public double sumSquaredErrorTotal;
+
         #endregion
 
         /// <summary>
