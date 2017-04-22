@@ -94,6 +94,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Activate Functions\SigmoidalFunction.cs" />
+    <Compile Include="UserInteraction.cs" />
     <Compile Include="WorkMode\TeachingMode.cs" />
     <Compile Include="TeachingPatterns.cs" />
     <Compile Include="WorkMode\TestingMode.cs" />

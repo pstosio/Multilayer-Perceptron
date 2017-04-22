@@ -270,8 +270,8 @@ namespace IAD_2
             }
         }
 
-        [Obsolete]
-        public void DEL_uploadWeights(double _learningFactor, double _momentumFactor)
+        [Obsolete("Wrong function")]
+        public void uploadWeights(double _learningFactor, double _momentumFactor)
         {
             // Iteracja po warstwach - od ostatniej
             for (int i = layers.Count - 1; i >= 0; i--)

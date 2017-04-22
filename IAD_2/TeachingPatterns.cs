@@ -8,15 +8,19 @@ namespace IAD_2
 {
     public class TeachingPatterns
     {
-        Random rnd;
-        int pattern = 0;
+        int retPattern = 0;
+        int[] order = new int[4];
+
+        public TeachingPatterns()
+        {
+            order = this.getRandOrder();
+        }
 
         public double[] getRandomTeachingPattern()
         {
-            rnd = new Random(Guid.NewGuid().GetHashCode());
-            pattern = rnd.Next(1, 5);
+            retPattern++;
 
-            return this.getPattern(pattern);
+            return this.getPattern(order[retPattern - 1]);
         }
 
         public double[] getTeachingPattern(int _patterNum)
@@ -42,6 +46,35 @@ namespace IAD_2
             }
 
             return new double[4] { 0, 0, 0, 0 };
+        }
+
+        private int[] getRandOrder()
+        {
+            int k = 4;
+            int n = 4;
+            int[] ret = new int[4];
+            Random rand = new Random(Guid.NewGuid().GetHashCode());
+            // wypełnianie tablicy liczbami 1,2...n
+
+            int[] numbers = new int[n];
+            for (int i = 0; i < n; i++)
+                numbers[i] = i + 1;
+            // losowanie k liczb
+
+            for (int i = 0; i < k; i++)
+            {
+                // tworzenie losowego indeksu pomiędzy 0 i n - 1
+                int r = rand.Next(n);
+
+                // wybieramy element z losowego miejsca
+                ret[i] = numbers[r];
+
+                // przeniesienia ostatniego elementu do miejsca z którego wzięliśmy
+                numbers[r] = numbers[n - 1];
+                n--;
+            }
+
+            return ret;
         }
     }
 }

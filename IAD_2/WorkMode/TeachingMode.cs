@@ -13,12 +13,13 @@ namespace IAD_2
 
         public TeachingMode(Perceptron _perceptron, int _epoch, int _logJump, bool _isRandomOrderPatterns, double _learnFactor, double _momentum, double _errorLevel = 0.0)
         {
-            teachingPatterns = new TeachingPatterns();
             perceptron = _perceptron;
             perceptron.randomWeights();
 
             for (int i = 0; i <= _epoch; i++)
             {
+                teachingPatterns = new TeachingPatterns(); 
+
                 for (int j = 1; j <= 4; j++)
                 {
                     if (_isRandomOrderPatterns == true)
