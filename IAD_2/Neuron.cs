@@ -111,7 +111,7 @@ namespace IAD_2
         }
 
         /// <summary>
-        /// Funkcja losuje wagi neuronu z przedziału -1,1
+        /// Funkcja losuje wagi neuronu z przedziału -0.5, 0.5
         /// </summary>
         public void generateRandomWeights()
         {

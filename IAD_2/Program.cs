@@ -24,11 +24,11 @@ namespace IAD_2
             perceptron.initLayer(2, 2, 4, new SigmoidalFunction(), true);
             perceptron.initLayer(3, 4, 2, new SigmoidalFunction(), true);
 
-            bool learnMode = true; // <== Tu można przestawić tryb pracy perceptronu
+            bool learnMode = false; // <== Tu można przestawić tryb pracy perceptronu
 
             if (learnMode == true)
             {
-                teach = new TeachingMode(perceptron, 300, 1, true, 0.9, 0.6);
+                teach = new TeachingMode(perceptron, 2000, 1, false, 0.3, 0.7);
                 perceptron.saveWeightsToFile();
             }
             else
