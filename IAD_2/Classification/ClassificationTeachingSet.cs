@@ -14,6 +14,11 @@ namespace IAD_2
         List<double[]> versicolor;
         List<double[]> virginica;
 
+        //  4 caechy Irisów
+        List<double[]> setosaTest;
+        List<double[]> versicolorTest;
+        List<double[]> virginicaTest;
+
         int[] setosaOrder;
         int[] versicolorOrder;
         int[] virginicaOrder;
@@ -29,7 +34,12 @@ namespace IAD_2
             versicolor = new List<double[]>();
             virginica = new List<double[]>();
 
+            setosaTest = new List<double[]>();
+            versicolorTest = new List<double[]>();
+            virginicaTest = new List<double[]>();
+
             this.uploadIrisDataSet();
+            this.uploadIrisTestDataSet();
 
             setosaOrder = this.getRandOrder(setosa.Count);
             versicolorOrder = this.getRandOrder(versicolor.Count);
@@ -61,6 +71,21 @@ namespace IAD_2
                     return versicolor[_counter];
                 case 3:
                     return virginica[_counter];
+            }
+
+            return new double[4];
+        }
+
+        public double[] getTestingPattern(int _featureNum, int _counter)
+        {
+            switch (_featureNum)
+            {
+                case 1:
+                    return setosaTest[_counter];
+                case 2:
+                    return versicolorTest[_counter];
+                case 3:
+                    return virginicaTest[_counter];
             }
 
             return new double[4];
@@ -118,6 +143,56 @@ namespace IAD_2
 
                             case "vi":
                                 virginica.Add(features);
+                                break;
+                        }
+
+                        counter++;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                // Let the user know what went wrong.
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        private void uploadIrisTestDataSet()
+        {
+            string path = @"C:\Users\Peter\Desktop\IAD\Zad 2\iris_validation.txt";
+            try
+            {
+                // Create an instance of StreamReader to read from a file.
+                // The using statement also closes the StreamReader.
+                using (StreamReader sr = new StreamReader(path))
+                {
+                    string line;
+
+                    // Read and display lines from the file until 
+                    // the end of the file is reached. 
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        string[] splittedLine = splittedLine = line.Split(','); // <-- separator
+                        double[] features = new double[4];
+
+                        features[0] = Convert.ToDouble(splittedLine[0], System.Globalization.CultureInfo.InvariantCulture); // Długość Sepala
+                        features[1] = Convert.ToDouble(splittedLine[1], System.Globalization.CultureInfo.InvariantCulture); // Szerokość Sepala
+                        features[2] = Convert.ToDouble(splittedLine[2], System.Globalization.CultureInfo.InvariantCulture); // Długość Petala
+                        features[3] = Convert.ToDouble(splittedLine[3], System.Globalization.CultureInfo.InvariantCulture); // Szerokość Petala
+
+                        switch (splittedLine[4].Substring(5, 2))
+                        {
+                            case "se":
+                                setosaTest.Add(features);
+                                break;
+
+                            case "ve":
+                                versicolorTest.Add(features);
+                                break;
+
+                            case "vi":
+                                virginicaTest.Add(features);
                                 break;
                         }
 

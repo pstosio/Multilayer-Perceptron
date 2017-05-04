@@ -21,9 +21,9 @@ namespace IAD_2
 
             for (int i = 1; i <= 3; i++)
             {
-                for (int j = 0; j < 50; j++)
+                for (int j = 0; j < 3; j++)
                 {
-                    input = cts.getTeachingPattern(i, j);
+                    input = cts.getTestingPattern(i, j);
                     expected = cts.getOutput(i);
 
                     perceptron.forwardPropagation(input);
@@ -53,7 +53,7 @@ namespace IAD_2
 
                 perceptron.estimateSumSquaredError();
             }
-            
+
 
             Console.WriteLine("błąd średniokwadratowy: {0}\n", perceptron.getTotalSumSquaredError());
         }

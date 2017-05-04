@@ -25,7 +25,7 @@ namespace IAD_2
                 {
                     for (int k = 1; k <= 3; k++)
                     {
-                        input = cts.getRandomTeachingPattern(k, j);
+                        input = _isRandomOrderPatterns ? cts.getRandomTeachingPattern(k, j) : cts.getTeachingPattern(k, j);
                         expected = cts.getOutput(k);
 
                         /**** BACK PROPAGATION ALGORITHM ****/
